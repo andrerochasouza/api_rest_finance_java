@@ -1,5 +1,0 @@
-package br.com.finance.cdd.model.repository;
-
-public interface UserRepository {
-
-}
