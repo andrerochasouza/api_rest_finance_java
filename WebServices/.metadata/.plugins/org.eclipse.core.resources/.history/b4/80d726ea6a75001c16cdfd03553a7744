@@ -1,0 +1,5 @@
+package br.com.finance.cdd.model.entities;
+
+public class Pay {
+
+}

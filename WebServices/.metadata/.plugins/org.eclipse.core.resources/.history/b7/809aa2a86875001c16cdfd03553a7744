@@ -1,0 +1,22 @@
+package br.com.finance.cdd.model.entities;
+
+import java.util.Date;
+
+import javax.persistence.Entity;
+
+@Entity
+public class User {
+
+	private long id;
+	private String name;
+	private String cpf;
+	private String login;
+	private String password;
+	private double wallet;
+	private Date dateCreation = new Date();
+	private Date dateDelete;
+	
+	public User() {}
+
+	
+}

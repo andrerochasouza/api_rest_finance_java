@@ -1,0 +1,40 @@
+package br.com.finance.cdd.model.entities;
+
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
+@Entity
+@Table(name = "pays")
+public class Pay {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
+	@NotBlank
+	private String name;
+	
+	@Min(0)
+	private double value;
+	
+	@NotBlank
+	private Date datePay;
+	
+	private Date dateInit = new Date();
+	
+	@ManyToOne
+	private User user;
+	
+	private Date dateDelete;
+	
+	private String desc;
+
+}

@@ -1,0 +1,65 @@
+package br.com.finance.cdd.model.entities;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
+@Entity
+@Table(name = "users")
+public class User {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
+	@NotBlank
+	private String name;
+	
+	@NotBlank
+	private String cpf;
+	
+	@Min(0)
+	private double wallet;
+	
+	private Date dateCreation = new Date();
+	
+	@NotBlank
+	private Date dateDelete;
+	
+	@OneToMany(mappedBy = "users")
+	private List<Pay> pays;
+
+	public User() {
+	}
+
+
+	// Regras de Negocio
+
+	// Getters, Setters, HashCode and equals
+
+
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if ((obj == null) || (getClass() != obj.getClass()))
+			return false;
+		User other = (User) obj;
+		return id == other.id;
+	}
+}
