@@ -16,22 +16,22 @@ import br.com.finance.cdd.model.entities.User;
 import br.com.finance.cdd.model.repository.UserRepository;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/userpage")
 public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@GetMapping("/")
-	public ModelAndView index(ModelAndView modelAndView) {
-		modelAndView = new ModelAndView("index");
-		return modelAndView;
+	public ModelAndView userPage() {
+		ModelAndView mv = new ModelAndView("userPage");
+		return mv;
 	}
-	
-	@GetMapping("/userpage")
-	public ModelAndView userPage(ModelAndView modelAndView) {
-		modelAndView = new ModelAndView("userPage");
-		return modelAndView;
+
+	@GetMapping("/usergain")
+	public ModelAndView userGain() {
+		ModelAndView mv = new ModelAndView("usergain");
+		return mv;
 	}
 
 	@GetMapping("/user/{id}")
