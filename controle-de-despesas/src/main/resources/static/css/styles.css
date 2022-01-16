@@ -11398,6 +11398,8 @@ header.masthead {
   background-attachment: scroll;
   background-size: cover;
 }
+
+
 header.masthead h1, header.masthead .h1 {
   font-size: 2.25rem;
 }
@@ -11420,6 +11422,19 @@ header.masthead h1, header.masthead .h1 {
     font-size: 3.5rem;
   }
 }
+
+/* MastHeadUser */
+
+header.mastheaduser {
+  padding-top: 10rem;
+  padding-bottom: calc(10rem - 4.5rem);
+  background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("../assets/img/bg-masthead.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+}
+
 
 #portfolio .container-fluid, #portfolio .container-sm, #portfolio .container-md, #portfolio .container-lg, #portfolio .container-xl, #portfolio .container-xxl {
   max-width: 1920px;
