@@ -11,39 +11,30 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.model.entities.User;
-import br.com.finance.cdd.model.repository.UserRepository;
+import br.com.finance.cdd.model.services.UserServices;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/userpage")
 public class UserController {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserServices service;
 
-	@GetMapping("/")
-	public ModelAndView index(ModelAndView modelAndView) {
-		modelAndView = new ModelAndView("index");
-		return modelAndView;
-	}
-	
-	@GetMapping("/userpage")
-	public ModelAndView userPage(ModelAndView modelAndView) {
-		modelAndView = new ModelAndView("userPage");
-		return modelAndView;
+	@GetMapping({"", "/"})
+	public ModelAndView userPage() {
+		ModelAndView mv = new ModelAndView("/////");
+		return mv;
 	}
 
-	@GetMapping("/user/{id}")
+	@GetMapping("/{id}")
 	public @ResponseBody User findByIdUser(@PathVariable long id) {
-		return userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
+		return service.findById(id);
 	}
 
 	@PostMapping("/salvar")
 	public @ResponseBody User saveUser(@Valid User user) {
-		userRepository.save(user);
-		return user;
+		return service.saveAll(user);
 	}
 
 }
