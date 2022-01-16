@@ -10,7 +10,7 @@ public class homePageController {
 	
 	@RequestMapping(path = ("/"), method = RequestMethod.GET)
 	public ModelAndView index() {
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("///////");
 		return mv;
 	}
 
