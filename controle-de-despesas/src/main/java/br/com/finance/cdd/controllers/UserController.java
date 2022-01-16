@@ -1,5 +1,7 @@
 package br.com.finance.cdd.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,11 @@ public class UserController {
 	@GetMapping("/{id}")
 	public @ResponseBody User findByIdUser(@PathVariable long id) {
 		return service.findById(id);
+	}
+	
+	@GetMapping("/users")
+	public @ResponseBody List<User> findAll() {
+		return service.findAll();
 	}
 
 	@PostMapping("/salvar")
