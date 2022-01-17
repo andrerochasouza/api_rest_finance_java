@@ -19,8 +19,8 @@ public class UserServices {
 		return userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
 	}
-
-	public User saveAll(User user) {
+	
+	public User save(User user) {
 		return userRepository.save(user);
 	}
 	
