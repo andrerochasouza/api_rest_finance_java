@@ -29,10 +29,14 @@ public class UserDTO {
 		return wallet;
 	}
 	
-	// Retorno de dados dos usuarios (protejido pelo DTO)
+	// Retorno de dados dos usuarios (protegido pelo DTO)
 
-	public List<UserDTO> listUsersDTO(List<User> users){
+	public List<UserDTO> listUsersDTOconverter(List<User> users){
 		return users.stream().map(UserDTO::new).collect(Collectors.toList());
+	}
+	
+	public UserDTO userDTOConverter(User user) {
+		return new UserDTO(user);
 	}
 	
 	
