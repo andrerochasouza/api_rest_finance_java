@@ -62,6 +62,12 @@ public class User {
 	// Getters, Setters, HashCode and equals
 
 	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
+	}
+	
+	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}

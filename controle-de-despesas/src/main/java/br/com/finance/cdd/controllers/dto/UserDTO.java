@@ -11,6 +11,8 @@ public class UserDTO {
 	private String name;
 	private double wallet;
 
+	public UserDTO() {}
+	
 	public UserDTO(User user) {
 		this.id = user.getId();
 		this.name = user.getName();
