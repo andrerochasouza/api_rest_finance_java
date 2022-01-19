@@ -58,6 +58,7 @@ public class User {
 	}
 
 	// Regras de Negocio
+	
 
 	// Getters, Setters, HashCode and equals
 

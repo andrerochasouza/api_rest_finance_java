@@ -22,6 +22,7 @@ public class Pay {
 	@NotBlank
 	private String name;
 	
+	@NotBlank
 	@Min(0)
 	private double value;
 	
@@ -53,6 +54,7 @@ public class Pay {
 		this.descricao = desc;
 	}
 
+	
 	public long getId() {
 		return id;
 	}
