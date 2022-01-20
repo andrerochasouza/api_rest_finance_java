@@ -14,8 +14,8 @@ public class PayServices {
 	@Autowired
 	private UserServices userServices;
 
-	public void save(Long id, Pay pay) {
-		pay.setUser(userServices.findById(id));
+	public void save(String name, Pay pay) {
+		pay.setUser(userServices.findByName(name));
 		payRepository.save(pay);
 	}	
 }

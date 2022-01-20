@@ -20,6 +20,11 @@ public class UserServices {
 				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
 	}
 	
+	public User findByName(String name) {
+		return userRepository.findByName(name)
+				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By Name: " + name));
+	}
+	
 	public User save(User user) {
 		return userRepository.save(user);
 	}

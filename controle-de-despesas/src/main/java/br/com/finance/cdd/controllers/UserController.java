@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.finance.cdd.dto.GainDTO;
+import br.com.finance.cdd.dto.PayDTO;
+import br.com.finance.cdd.dto.UserDTO;
+import br.com.finance.cdd.model.Gain;
 import br.com.finance.cdd.model.Pay;
-import br.com.finance.cdd.model.User;
+import br.com.finance.cdd.service.GainServices;
 import br.com.finance.cdd.service.PayServices;
 import br.com.finance.cdd.service.UserServices;
 
@@ -25,18 +29,30 @@ public class UserController {
 	private UserServices serviceUser;
 	@Autowired
 	private PayServices servicePay;
+	@Autowired
+	private GainServices serviceGain;
 	
 	// Está funcionando
-	@GetMapping("/{id}")
-	public ResponseEntity<User> getUserPage(@PathVariable(name = "id") Long id) {
-		User user = serviceUser.findById(id);
-		return new ResponseEntity<User>(user, HttpStatus.FOUND);
+	@GetMapping("/{name}")
+	public ResponseEntity<UserDTO> getUserPageName(@PathVariable(name = "name") String name) {
+		UserDTO userDTO = new UserDTO(serviceUser.findByName(name));
+		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.FOUND);
 	}
 	
-	@PostMapping("/add/despesa/{id}") //Tem que criar um DTO Pay
-	public ResponseEntity<Pay> createPay(@PathVariable(name = "id") Long id, @Valid @RequestBody Pay pay){
-		servicePay.save(id, pay);
-		return new ResponseEntity<Pay>(pay, HttpStatus.CREATED);
+	// Está funcionando
+	@PostMapping("/add/receita/{name}")
+	public ResponseEntity<GainDTO> createGain(@PathVariable(name = "name") String name, @Valid @RequestBody Gain gain){
+		serviceGain.save(name, gain);
+		GainDTO gainDTO = new GainDTO(gain);
+		return new ResponseEntity<GainDTO>(gainDTO, HttpStatus.CREATED);
+	}
+	
+	// Está funcionando
+	@PostMapping("/add/despesa/{name}")
+	public ResponseEntity<PayDTO> createPay(@PathVariable(name = "name") String name, @Valid @RequestBody Pay pay){
+		servicePay.save(name, pay);
+		PayDTO payDTO = new PayDTO(pay);
+		return new ResponseEntity<PayDTO>(payDTO, HttpStatus.CREATED);
 	}
 
 }
