@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +36,8 @@ public class UserController {
 	// Está funcionando
 	@GetMapping("/{name}")
 	public ResponseEntity<UserDTO> getUserPageName(@PathVariable(name = "name") String name) {
-		UserDTO userDTO = new UserDTO(serviceUser.findByName(name));
-		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.FOUND);
+		UserDTO userDTO = new UserDTO(serviceUser.findByNameOffDelete(name));
+		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.FOUND);	
 	}
 	
 	// Está funcionando
@@ -53,6 +54,14 @@ public class UserController {
 		servicePay.save(name, pay);
 		PayDTO payDTO = new PayDTO(pay);
 		return new ResponseEntity<PayDTO>(payDTO, HttpStatus.CREATED);
+	}
+			
+	
+	@DeleteMapping("delete/despesa/{name}/{id}")
+	public ResponseEntity<PayDTO> deletePay(@PathVariable(name = "id") Long id){
+		servicePay.delete(id);
+		PayDTO payDTO = servicePay.findById(id);
+		return new ResponseEntity<PayDTO>(payDTO, HttpStatus.OK);
 	}
 
 }

@@ -40,4 +40,5 @@ public class UserDTO {
 	public List<GainDTO> getGainsDTO() {
 		return gainsDTO;
 	}
+	
 }
