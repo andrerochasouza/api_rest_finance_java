@@ -1,4 +1,4 @@
-package br.com.finance.cdd.model.services;
+package br.com.finance.cdd.service;
 
 import java.util.List;
 
@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.finance.cdd.error.ResourceNotFoundException;
-import br.com.finance.cdd.model.entities.User;
-import br.com.finance.cdd.model.repository.UserRepository;
+import br.com.finance.cdd.model.User;
+import br.com.finance.cdd.repository.UserRepository;
 
 @Service
 public class UserServices {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	public User findById(Long id) {
 		return userRepository.findById(id)

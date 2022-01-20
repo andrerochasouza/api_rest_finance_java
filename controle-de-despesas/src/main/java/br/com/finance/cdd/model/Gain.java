@@ -1,4 +1,4 @@
-package br.com.finance.cdd.model.entities;
+package br.com.finance.cdd.model;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Pay {
+public class Gain {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,39 +22,32 @@ public class Pay {
 	@NotBlank
 	private String name;
 	
-	@NotBlank
 	@Min(0)
 	private double value;
-	
-	@NotBlank
-	private Date datePay;
 	
 	private Date dateInit = new Date();
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_user_pay")
+	@JoinColumn(name = "id_user_gain")
 	private User user;
 	
 	private Date dateDelete;
 	
 	private String descricao;
 
-	public Pay() {
+	public Gain() {
 	}
 
-	public Pay( String name, double value, Date datePay, Date dateInit, User user,
-			Date dateDelete, String desc) {
+	public Gain(String name, double value, Date dateInit, User user, Date dateDelete, String desc) {
 		super();
 		this.name = name;
 		this.value = value;
-		this.datePay = datePay;
 		this.dateInit = dateInit;
 		this.user = user;
 		this.dateDelete = dateDelete;
 		this.descricao = desc;
 	}
 
-	
 	public long getId() {
 		return id;
 	}
@@ -77,14 +70,6 @@ public class Pay {
 
 	public void setValue(double value) {
 		this.value = value;
-	}
-
-	public Date getDatePay() {
-		return datePay;
-	}
-
-	public void setDatePay(Date datePay) {
-		this.datePay = datePay;
 	}
 
 	public Date getDateInit() {
@@ -118,6 +103,5 @@ public class Pay {
 	public void setDesc(String desc) {
 		this.descricao = desc;
 	}
-
-
+	
 }
