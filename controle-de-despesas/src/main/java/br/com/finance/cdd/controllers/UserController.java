@@ -56,12 +56,20 @@ public class UserController {
 		return new ResponseEntity<PayDTO>(payDTO, HttpStatus.CREATED);
 	}
 			
-	
-	@DeleteMapping("delete/despesa/{name}/{id}")
+	// Está funcionando
+	@DeleteMapping("/delete/despesa/{name}/{id}")
 	public ResponseEntity<PayDTO> deletePay(@PathVariable(name = "id") Long id){
 		servicePay.delete(id);
 		PayDTO payDTO = servicePay.findById(id);
 		return new ResponseEntity<PayDTO>(payDTO, HttpStatus.OK);
+	}
+	
+	// Está funcionando
+	@DeleteMapping("/delete/receita/{name}/{id}")
+	public ResponseEntity<GainDTO> deleteGain(@PathVariable(name = "id") Long id){
+		serviceGain.delete(id);
+		GainDTO gainDTO = serviceGain.findById(id);
+		return new ResponseEntity<GainDTO>(gainDTO, HttpStatus.OK);
 	}
 
 }

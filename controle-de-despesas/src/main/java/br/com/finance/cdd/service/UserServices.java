@@ -44,14 +44,4 @@ public class UserServices {
 		user.setGains(gains);
 		return user;
 	}
-	
-	
-	
-	public User save(User user) {
-		return userRepository.save(user);
-	}
-	
-	public List<User> findAll(){
-		return userRepository.findAll();
-	}
 }
