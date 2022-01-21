@@ -1,4 +1,4 @@
-package br.com.finance.cdd.model.entities;
+package br.com.finance.cdd.model;
 
 import java.util.Date;
 import java.util.List;
@@ -11,8 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+
+import br.com.finance.cdd.form.UserForm;
 
 @Entity
 @Table(name = "users")
@@ -28,7 +29,7 @@ public class User {
 	@NotBlank
 	private String cpf;
 
-	@Min(0)
+
 	private double wallet;
 
 	private Date dateCreation = new Date();
@@ -56,11 +57,16 @@ public class User {
 		this.pays = pays;
 		this.gains = gains;
 	}
-
-	// Regras de Negocio
+	
 
 	// Getters, Setters, HashCode and equals
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

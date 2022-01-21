@@ -1,4 +1,4 @@
-package br.com.finance.cdd.model.entities;
+package br.com.finance.cdd.model;
 
 import java.util.Date;
 
@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Pay {
@@ -22,10 +23,10 @@ public class Pay {
 	@NotBlank
 	private String name;
 	
+	@NotNull
 	@Min(0)
 	private double value;
 	
-	@NotBlank
 	private Date datePay;
 	
 	private Date dateInit = new Date();
@@ -53,6 +54,7 @@ public class Pay {
 		this.descricao = desc;
 	}
 
+	
 	public long getId() {
 		return id;
 	}

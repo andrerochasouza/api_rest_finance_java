@@ -1,4 +1,4 @@
-package br.com.finance.cdd.model.entities;
+package br.com.finance.cdd.model;
 
 import java.util.Date;
 
