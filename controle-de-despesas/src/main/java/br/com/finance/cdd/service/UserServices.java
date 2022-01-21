@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.finance.cdd.error.ResourceNotFoundException;
@@ -57,12 +60,14 @@ public class UserServices {
 	}
 
 	// Retorna Lista de UsersForm com users deletadas
-	public List<UserForm> findAllUserForm() {
-		List<User> users = userRepository.findAll();
+	public Page<UserForm> findAllUserForm(Pageable pageable) {
+		Page<User> users = userRepository.findAll(pageable);
 		List<UserForm> usersForm = users.stream()
 									.filter(x -> x.getDateDelete() == null)
-									.map(x -> new UserForm(x)).collect(Collectors.toList());
-		return usersForm;
+									.map(x -> new UserForm(x))
+									.collect(Collectors.toList());
+				
+		return new PageImpl<UserForm>(usersForm);
 	}
 
 	// Salva um UserForm
