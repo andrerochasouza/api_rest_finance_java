@@ -26,8 +26,7 @@ public class PayServices {
 
 	// Deleta o Pay
 	public void delete(Long id) {
-		Pay pay = payRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
+		Pay pay = findByIdPay(id);
 		if (pay.getDateDelete() == null) {
 			pay.setDateDelete(new Date());
 			payRepository.save(pay);
@@ -38,8 +37,15 @@ public class PayServices {
 
 	// Retorna um PayDTO pelo Id
 	public PayDTO findById(Long id) {
-		Pay pay = payRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
+		Pay pay = findByIdPay(id);
 		return new PayDTO(pay);
+	}
+	
+	
+	// Otimizaação de código]
+	
+	private Pay findByIdPay(Long id) {
+		return payRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
 	}
 }

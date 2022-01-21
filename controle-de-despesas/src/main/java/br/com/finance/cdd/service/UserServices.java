@@ -24,26 +24,15 @@ public class UserServices {
 	private UserRepository userRepository;
 
 	
-	
 	// Regras de negócio
 	
 	// Retorna um User não deletado
 	public User findByIdUser(Long id) {
-		User user = userFindById(id);
-		if (user.getDateDelete() == null) {
-			return user;
-		} else {
-			throw new ResourceNotFoundException("User Not Found By ID: " + id);
-		}
+		return userFindById(id);
 	}
 
 	public User findByNameUser(String name) {
-		User user = userFindByName(name);
-		if (user.getDateDelete() == null) {
-			return user;
-		} else {
-			throw new ResourceNotFoundException("User Not Found By Name: " + name);
-		}
+		return userFindByName(name);
 	}
 
 	// Retorna User sem os Pays e Gains deletados
@@ -91,15 +80,25 @@ public class UserServices {
 	}
 	
 	
-	// Otimizaação de código
+	// Otimização de código
 	
 	private User userFindById(Long id) {
-		return userRepository.findById(id)
+		User user = userRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
+		if (user.getDateDelete() == null) {
+			return user;
+		} else {
+			throw new ResourceNotFoundException("User Not Found By ID: " + id);
+		}
 	}
 		
 	private User userFindByName(String name) {
-		return userRepository.findByName(name)
+		User user = userRepository.findByName(name)
 				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By Name: " + name));
+		if (user.getDateDelete() == null) {
+			return user;
+		} else {
+			throw new ResourceNotFoundException("User Not Found By Name: " + name);
+		}
 	}
 }
