@@ -18,22 +18,28 @@ public class PayServices {
 	@Autowired
 	private UserServices userServices;
 
-	public void save(String name, Pay pay) {
-		pay.setUser(userServices.findByNameUser(name));
+	// Salva o Pay
+	public void save(Long id, Pay pay) {
+		pay.setUser(userServices.findByIdUser(id));
 		payRepository.save(pay);
 	}
 
+	// Deleta o Pay
 	public void delete(Long id) {
 		Pay pay = payRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
-		pay.setDateDelete(new Date());
-		payRepository.save(pay);
+				.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
+		if (pay.getDateDelete() == null) {
+			pay.setDateDelete(new Date());
+			payRepository.save(pay);
+		} else {
+			throw new ResourceNotFoundException("Pay Not Found By ID: " + id);
+		}
 	}
 
+	// Retorna um PayDTO pelo Id
 	public PayDTO findById(Long id) {
 		Pay pay = payRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
 		return new PayDTO(pay);
-	}	
+	}
 }
-

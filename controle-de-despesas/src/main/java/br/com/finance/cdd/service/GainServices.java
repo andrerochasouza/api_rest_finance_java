@@ -17,22 +17,29 @@ public class GainServices {
 	private GainRepository gainRepository;
 	@Autowired
 	private UserServices userServices;
-	
-	public void save(String name, Gain gain) {
-		gain.setUser(userServices.findByNameUser(name));
+
+	// Salva o Gain
+	public void save(Long id, Gain gain) {
+		gain.setUser(userServices.findByIdUser(id));
 		gainRepository.save(gain);
 	}
 
+	// Deleta o Gain
 	public void delete(Long id) {
 		Gain gain = gainRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Gain Not Found By ID: " + id));
-		gain.setDateDelete(new Date());
-		gainRepository.save(gain);
+		if (gain.getDateDelete() == null) {
+			gain.setDateDelete(new Date());
+			gainRepository.save(gain);
+		} else {
+			throw new ResourceNotFoundException("Pay Not Found By ID: " + id);
+		}
 	}
-	
+
+	// Retorna um GainDTO pelo Id Gain
 	public GainDTO findById(Long id) {
 		Gain gain = gainRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("Gain Not Found By ID: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("Gain Not Found By ID: " + id));
 		return new GainDTO(gain);
-	}	
+	}
 }

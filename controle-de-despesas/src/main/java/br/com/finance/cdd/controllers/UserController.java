@@ -33,43 +33,44 @@ public class UserController {
 	@Autowired
 	private GainServices serviceGain;
 	
-	// Está funcionando
-	@GetMapping("/{name}")
-	public ResponseEntity<UserDTO> getUserPageName(@PathVariable(name = "name") String name) {
-		UserDTO userDTO = new UserDTO(serviceUser.findByNameUserOffDelete(name));
+	// Retorna UserDTO (Informações do Usuário)
+	@GetMapping("/{id}")
+	public ResponseEntity<UserDTO> getUserPageId(@PathVariable(name = "id") Long id) {
+		UserDTO userDTO = new UserDTO(serviceUser.findByIdUserOffDelete(id));
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.FOUND);	
 	}
 	
-	// Está funcionando
-	@PostMapping("/add/receita/{name}")
-	public ResponseEntity<GainDTO> createGain(@PathVariable(name = "name") String name, @Valid @RequestBody Gain gain){
-		serviceGain.save(name, gain);
+	// Adiciona uma receita pelo ID do User
+	@PostMapping("/{id}/add/receita")
+	public ResponseEntity<GainDTO> createGain(@PathVariable(name = "id") Long id, @Valid @RequestBody Gain gain){
+		serviceGain.save(id, gain);
 		GainDTO gainDTO = new GainDTO(gain);
 		return new ResponseEntity<GainDTO>(gainDTO, HttpStatus.CREATED);
 	}
 	
-	// Está funcionando
-	@PostMapping("/add/despesa/{name}")
-	public ResponseEntity<PayDTO> createPay(@PathVariable(name = "name") String name, @Valid @RequestBody Pay pay){
-		servicePay.save(name, pay);
+	// Adiciona uma despesa pelo ID do User
+	@PostMapping("/{id}/add/despesa")
+	public ResponseEntity<PayDTO> createPay(@PathVariable(name = "id") Long id, @Valid @RequestBody Pay pay){
+		servicePay.save(id, pay);
 		PayDTO payDTO = new PayDTO(pay);
 		return new ResponseEntity<PayDTO>(payDTO, HttpStatus.CREATED);
 	}
-			
-	// Está funcionando
-	@DeleteMapping("/delete/despesa/{name}/{id}")
+	
+	// Deleta uma despesa pelo Id do Gain
+	@DeleteMapping("/delete/receita/{id}")
+	public ResponseEntity<GainDTO> deleteGain(@PathVariable(name = "id") Long id){
+		serviceGain.delete(id);
+		GainDTO gainDTO = serviceGain.findById(id);
+		return new ResponseEntity<GainDTO>(gainDTO, HttpStatus.OK);
+	}
+	
+	// Deleta uma despesa pelo Id do Pay
+	@DeleteMapping("/delete/despesa/{id}")
 	public ResponseEntity<PayDTO> deletePay(@PathVariable(name = "id") Long id){
 		servicePay.delete(id);
 		PayDTO payDTO = servicePay.findById(id);
 		return new ResponseEntity<PayDTO>(payDTO, HttpStatus.OK);
 	}
 	
-	// Está funcionando
-	@DeleteMapping("/delete/receita/{name}/{id}")
-	public ResponseEntity<GainDTO> deleteGain(@PathVariable(name = "id") Long id){
-		serviceGain.delete(id);
-		GainDTO gainDTO = serviceGain.findById(id);
-		return new ResponseEntity<GainDTO>(gainDTO, HttpStatus.OK);
-	}
 
 }
