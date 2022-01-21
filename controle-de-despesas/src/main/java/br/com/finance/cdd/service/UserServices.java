@@ -20,10 +20,13 @@ public class UserServices {
 	@Autowired
 	private UserRepository userRepository;
 
+	
+	
+	// Regras de negócio
+	
 	// Retorna um User não deletado
 	public User findByIdUser(Long id) {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
+		User user = userFindById(id);
 		if (user.getDateDelete() == null) {
 			return user;
 		} else {
@@ -32,8 +35,7 @@ public class UserServices {
 	}
 
 	public User findByNameUser(String name) {
-		User user = userRepository.findByName(name)
-				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By Name: " + name));
+		User user = userFindByName(name);
 		if (user.getDateDelete() == null) {
 			return user;
 		} else {
@@ -43,8 +45,7 @@ public class UserServices {
 
 	// Retorna User sem os Pays e Gains deletados
 	public User findByIdUserOffDelete(Long id) {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
+		User user = userFindById(id);
 
 		List<Pay> pays = user.getPays().stream().filter(x -> x.getDateDelete() == null).collect(Collectors.toList());
 
@@ -75,13 +76,25 @@ public class UserServices {
 
 	// Deleta um User
 	public void deleteUserById(Long id) {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
+		User user = userFindById(id);
 		if (user.getDateDelete() == null) {
 			user.setDateDelete(new Date());
 			userRepository.save(user);
 		} else {
 			throw new ResourceNotFoundException("User Not Found By ID: " + id);
 		}
+	}
+	
+	
+	// Otimizaação de código
+	
+	private User userFindById(Long id) {
+		return userRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
+	}
+		
+	private User userFindByName(String name) {
+		return userRepository.findByName(name)
+				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By Name: " + name));
 	}
 }
