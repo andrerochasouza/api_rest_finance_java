@@ -19,7 +19,7 @@ public class PayServices {
 	private UserServices userServices;
 
 	public void save(String name, Pay pay) {
-		pay.setUser(userServices.findByName(name));
+		pay.setUser(userServices.findByNameUser(name));
 		payRepository.save(pay);
 	}
 

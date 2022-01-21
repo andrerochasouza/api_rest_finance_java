@@ -13,6 +13,7 @@ public class UserDTO {
 	private List<PayDTO> paysDTO;
 	private List<GainDTO> gainsDTO;
 	
+
 	public UserDTO(User user) {
 		this.id = user.getId();
 		this.name = user.getName();

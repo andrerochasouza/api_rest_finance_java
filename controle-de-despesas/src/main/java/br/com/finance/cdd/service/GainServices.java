@@ -19,7 +19,7 @@ public class GainServices {
 	private UserServices userServices;
 	
 	public void save(String name, Gain gain) {
-		gain.setUser(userServices.findByName(name));
+		gain.setUser(userServices.findByNameUser(name));
 		gainRepository.save(gain);
 	}
 

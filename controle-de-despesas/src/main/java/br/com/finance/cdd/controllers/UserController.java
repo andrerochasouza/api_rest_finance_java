@@ -36,7 +36,7 @@ public class UserController {
 	// Está funcionando
 	@GetMapping("/{name}")
 	public ResponseEntity<UserDTO> getUserPageName(@PathVariable(name = "name") String name) {
-		UserDTO userDTO = new UserDTO(serviceUser.findByNameOffDelete(name));
+		UserDTO userDTO = new UserDTO(serviceUser.findByNameUserOffDelete(name));
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.FOUND);	
 	}
 	
