@@ -26,8 +26,7 @@ public class GainServices {
 
 	// Deleta o Gain
 	public void delete(Long id) {
-		Gain gain = gainRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Gain Not Found By ID: " + id));
+		Gain gain = findbyidGain(id);
 		if (gain.getDateDelete() == null) {
 			gain.setDateDelete(new Date());
 			gainRepository.save(gain);
@@ -38,8 +37,15 @@ public class GainServices {
 
 	// Retorna um GainDTO pelo Id Gain
 	public GainDTO findById(Long id) {
-		Gain gain = gainRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Gain Not Found By ID: " + id));
+		Gain gain = findbyidGain(id);
 		return new GainDTO(gain);
+	}
+	
+	
+	// Otimização de Código
+	
+	private Gain findbyidGain(Long id) {
+		return gainRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Gain Not Found By ID: " + id));
 	}
 }
