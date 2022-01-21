@@ -1,10 +1,11 @@
 package br.com.finance.cdd.controllers;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,11 +26,19 @@ public class IndexController {
 	@Autowired
 	private UserServices serviceUser;
 
-	// Retorna Lista de UsersForm (Lista todos os Usuários não deletados)
+	// Retorna Page de UsersForm (Lista todos os Usuários não deletados)
 	@GetMapping
-	public ResponseEntity<List<UserForm>> indexPage() {
-		List<UserForm> usersForm = serviceUser.findAllUserForm();
-		return new ResponseEntity<List<UserForm>>(usersForm, HttpStatus.ACCEPTED);
+	public ResponseEntity<Page<UserForm>> indexPage(
+			@RequestParam(name = "numPage", required = false) Integer numPage) {
+		
+		Pageable page;
+		if(numPage != null) 
+			page = PageRequest.of(numPage - 1, 5);
+		else
+			page = PageRequest.of(0, 5);
+
+		Page<UserForm> usersForm = serviceUser.findAllUserForm(page);
+		return new ResponseEntity<Page<UserForm>>(usersForm, HttpStatus.ACCEPTED);
 	}
 
 	// Adiciona um novo User
