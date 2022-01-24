@@ -13,8 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import br.com.finance.cdd.form.UserForm;
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -30,7 +28,7 @@ public class User {
 	private String cpf;
 
 
-	private double wallet;
+	private double wallet = 0.0;
 
 	private Date dateCreation = new Date();
 

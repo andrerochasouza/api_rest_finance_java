@@ -11,8 +11,9 @@ public class UserForm {
 	@NotBlank
 	private String name;
 	
-	private Double wallet;
+	private Double wallet = 0.0;
 	
+	@NotBlank
 	private String cpf;
 	
 	public UserForm() {
