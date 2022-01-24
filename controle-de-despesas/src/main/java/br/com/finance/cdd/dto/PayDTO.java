@@ -9,28 +9,41 @@ public class PayDTO {
 	private Long id;
 	private String name;
 	private Double value;
+	private String descricao;
 	private Date datePay;
+	
 	
 	public PayDTO(Pay pay) {
 		this.id = pay.getId();
 		this.name = pay.getName();
 		this.value = pay.getValue();
+		this.descricao = pay.getDesc();
 		this.datePay = pay.getDatePay();
 	}
-	
+
+
 	public Long getId() {
 		return id;
 	}
+
+
 	public String getName() {
 		return name;
 	}
+
+
 	public Double getValue() {
 		return value;
 	}
-	public Date getDataPay() {
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+	public Date getDatePay() {
 		return datePay;
 	}
-	
-	
 	
 }

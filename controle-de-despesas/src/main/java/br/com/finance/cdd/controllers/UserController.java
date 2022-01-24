@@ -36,7 +36,7 @@ public class UserController {
 	// Retorna UserDTO (Informações do Usuário)
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> getUserPageId(@PathVariable(name = "id") Long id) {
-		UserDTO userDTO = new UserDTO(serviceUser.findByIdUserOffDelete(id));
+		UserDTO userDTO = new UserDTO(serviceUser.findByIdUser(id));
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.FOUND);	
 	}
 	

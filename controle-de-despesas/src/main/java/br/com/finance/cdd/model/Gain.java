@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Gain {
@@ -22,7 +23,8 @@ public class Gain {
 	@NotBlank
 	private String name;
 	
-	@Min(0)
+	@Min(0) 
+	@NotNull
 	private double value;
 	
 	private Date dateInit = new Date();

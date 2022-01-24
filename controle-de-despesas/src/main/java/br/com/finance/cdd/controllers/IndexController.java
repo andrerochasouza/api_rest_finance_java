@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class IndexController {
 	private UserServices serviceUser;
 
 	// Retorna Page de UsersForm (Lista todos os Usuários não deletados)
-	@GetMapping
+	@GetMapping()
 	public ResponseEntity<Page<UserForm>> indexPage(
 			@RequestParam(name = "numPage", required = false) Integer numPage) {
 		
@@ -54,6 +55,13 @@ public class IndexController {
 		UserForm userForm = new UserForm(serviceUser.findByIdUser(id));
 		serviceUser.deleteUserById(id);
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.OK);
+	}
+	
+	// Alterar um User,
+	@RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH})
+	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "id" , required = true) Long id, @Valid @RequestBody UserForm userForm){
+		serviceUser.updateUserForm(id, userForm);
+		return new ResponseEntity<UserForm>(userForm, HttpStatus.ACCEPTED);
 	}
 
 }
