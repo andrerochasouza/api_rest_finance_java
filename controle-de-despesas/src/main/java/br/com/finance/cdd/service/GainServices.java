@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.finance.cdd.dto.GainDTO;
 import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.model.Gain;
+import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.repository.GainRepository;
 
 @Service
@@ -20,15 +21,21 @@ public class GainServices {
 
 	// Salva o Gain
 	public void save(Long id, Gain gain) {
-		gain.setUser(userServices.findByIdUser(id));
+		User user = userServices.findByIdUser(id);
+		gain.setUser(user);
+		user.setWallet(user.getWallet() + gain.getValue());
+		userServices.saveUserUpdate(user);
 		gainRepository.save(gain);
 	}
 
 	// Deleta o Gain
 	public void delete(Long id) {
 		Gain gain = findbyidGain(id);
+		User user = gain.getUser();
 		if (gain.getDateDelete() == null) {
 			gain.setDateDelete(new Date());
+			user.setWallet(user.getWallet() - gain.getValue());
+			userServices.saveUserUpdate(user);
 			gainRepository.save(gain);
 		} else {
 			throw new ResourceNotFoundException("Pay Not Found By ID: " + id);

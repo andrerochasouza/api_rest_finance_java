@@ -57,10 +57,10 @@ public class IndexController {
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.OK);
 	}
 	
-	// Altera um User
+	// Alterar um User,
 	@RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH})
-	public ResponseEntity<UserForm> updateUser(@Valid @RequestBody UserForm userForm){
-		serviceUser.updateUserForm(userForm);
+	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "id" , required = true) Long id, @Valid @RequestBody UserForm userForm){
+		serviceUser.updateUserForm(id, userForm);
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.ACCEPTED);
 	}
 

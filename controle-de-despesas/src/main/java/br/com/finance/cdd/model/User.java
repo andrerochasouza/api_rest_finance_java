@@ -133,6 +133,7 @@ public class User {
 	public void setGains(List<Gain> gains) {
 		this.gains = gains;
 	}
+	
 
 	@Override
 	public boolean equals(Object obj) {
