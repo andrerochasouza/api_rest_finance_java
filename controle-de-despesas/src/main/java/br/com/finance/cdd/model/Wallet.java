@@ -1,6 +1,8 @@
 package br.com.finance.cdd.model;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,53 +10,45 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Pay {
-	
+@Table(name = "wallets")
+public class Wallet {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	@NotBlank
-	private String name;
-	
-	@NotNull
-	@Min(0)
-	private double value;
-	
-	private Date datePay;
-	
-	private Date dateInit = new Date();
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_user_pay")
-	private User user;
-	
-	private Date dateDelete;
-	
-	private String descricao;
 
-	public Pay() {
+	@NotNull
+	private double saldo;
+
+	private Date dateInit = new Date();
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_wallet")
+	private User user;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "wallet")
+	private List<Aplication> aplications;
+
+	private Date dateDelete;
+
+	public Wallet() {
 	}
 
-	public Pay( String name, double value, Date datePay, Date dateInit, User user,
-			Date dateDelete, String desc) {
+	public Wallet(@NotNull double value, Date dateInit, User user, List<Aplication> aplications, Date dateDelete) {
 		super();
-		this.name = name;
-		this.value = value;
-		this.datePay = datePay;
+		this.saldo = value;
 		this.dateInit = dateInit;
 		this.user = user;
+		this.aplications = aplications;
 		this.dateDelete = dateDelete;
-		this.descricao = desc;
 	}
 
-	
 	public long getId() {
 		return id;
 	}
@@ -63,28 +57,12 @@ public class Pay {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public double getValue() {
-		return value;
+		return saldo;
 	}
 
 	public void setValue(double value) {
-		this.value = value;
-	}
-
-	public Date getDatePay() {
-		return datePay;
-	}
-
-	public void setDatePay(Date datePay) {
-		this.datePay = datePay;
+		this.saldo = value;
 	}
 
 	public Date getDateInit() {
@@ -103,6 +81,14 @@ public class Pay {
 		this.user = user;
 	}
 
+	public List<Aplication> getAplications() {
+		return aplications;
+	}
+
+	public void setAplications(List<Aplication> aplications) {
+		this.aplications = aplications;
+	}
+
 	public Date getDateDelete() {
 		return dateDelete;
 	}
@@ -111,13 +97,20 @@ public class Pay {
 		this.dateDelete = dateDelete;
 	}
 
-	public String getDesc() {
-		return descricao;
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 
-	public void setDesc(String desc) {
-		this.descricao = desc;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Wallet other = (Wallet) obj;
+		return id == other.id;
 	}
-
-
 }
