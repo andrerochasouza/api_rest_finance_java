@@ -18,7 +18,6 @@ public class UserDTO {
 		this.wallet = user.getWallet();
 		this.cpf = user.getCpf();
 	}
-	
 
 	public Long getId() {
 		return id;

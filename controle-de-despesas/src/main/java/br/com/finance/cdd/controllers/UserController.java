@@ -1,22 +1,16 @@
 package br.com.finance.cdd.controllers;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import br.com.finance.cdd.dto.AplicationDTO;
 import br.com.finance.cdd.dto.UserDTO;
 import br.com.finance.cdd.model.Aplication;
+import br.com.finance.cdd.service.AplicationServices;
 import br.com.finance.cdd.service.UserServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/userpage")
@@ -39,7 +33,7 @@ public class UserController {
 	@PostMapping("/{id}/add/app")
 	public ResponseEntity<AplicationDTO> createGain(@PathVariable(name = "id") Long id, @Valid @RequestBody Aplication app){
 		serviceAplication.save(id, app);
-		AplciationDTO appDTO = new AplicationDTO(app);
+		AplicationDTO appDTO = new AplicationDTO(app);
 		return new ResponseEntity<AplicationDTO>(appDTO, HttpStatus.CREATED);
 	}
 	

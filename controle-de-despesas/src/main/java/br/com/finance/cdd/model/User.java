@@ -1,5 +1,7 @@
 package br.com.finance.cdd.model;
 
+import br.com.finance.cdd.form.UserForm;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -28,7 +30,7 @@ public class User {
 
 	private Date dateCreation = new Date();
 
-	private Date dateDelete;
+	private Date dateDelete = null;
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
 	private Wallet wallet;
@@ -108,5 +110,11 @@ public class User {
 			return false;
 		User other = (User) obj;
 		return id == other.id;
+	}
+
+	public User convertToUser(UserForm userForm){
+		Wallet wallet = getWallet();
+		wallet.setValue(userForm.getWalletValue());
+		return new User(userForm.getName(),userForm.getCpf(),getDateCreation(),getDateDelete(),wallet);
 	}
 }
