@@ -97,7 +97,7 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(cpf, dateCreation, dateDelete, id, name, wallet);
 	}
 
 	@Override
@@ -109,12 +109,12 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return id == other.id;
+		return Objects.equals(cpf, other.cpf) && Objects.equals(dateCreation, other.dateCreation)
+				&& Objects.equals(dateDelete, other.dateDelete) && id == other.id && Objects.equals(name, other.name)
+				&& Objects.equals(wallet, other.wallet);
 	}
 
 	public User convertToUser(UserForm userForm){
-		Wallet wallet = getWallet();
-		wallet.setValue(userForm.getWalletValue());
-		return new User(userForm.getName(),userForm.getCpf(),getDateCreation(),getDateDelete(),wallet);
+		return new User(userForm.getName(), userForm.getCpf(), getDateCreation(), getDateDelete(), null);
 	}
 }
