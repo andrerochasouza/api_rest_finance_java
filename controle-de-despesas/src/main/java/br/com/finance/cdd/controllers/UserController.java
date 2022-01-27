@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.finance.cdd.dto.AplicationDTO;
 import br.com.finance.cdd.dto.UserDTO;
+import br.com.finance.cdd.dto.WalletDTO;
 import br.com.finance.cdd.model.Aplication;
+import br.com.finance.cdd.model.Wallet;
 import br.com.finance.cdd.service.AplicationServices;
 import br.com.finance.cdd.service.UserServices;
 import br.com.finance.cdd.service.WalletServices;
@@ -34,20 +36,24 @@ public class UserController {
 	
 	// Retorna UserDTO (Informações do Usuário)
 	@GetMapping("/{id}")
-	public ResponseEntity<UserDTO> getUserPageId(@PathVariable(name = "id") Long id) {
-		UserDTO userDTO = new UserDTO(serviceUser.findByIdUser(id));
-		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.FOUND);	
+	public ResponseEntity<?> getUserPageId(@PathVariable(name = "id") Long id) {
+		if(serviceUser.findByIdUser(id).getWallet() ==  null) {
+			UserDTO userDTO = new UserDTO(serviceUser.findByIdUser(id));
+			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.ACCEPTED);	
+		}
+		Wallet wallet = serviceWallet.findByidWallet(serviceUser.findByIdUser(id).getWallet().getId());
+		WalletDTO walletDTO = new WalletDTO(wallet);
+		return new ResponseEntity<WalletDTO>(walletDTO, HttpStatus.FOUND);	
 	}
 	
 	// Criar Wallet
-	@PostMapping("/{id}/add/wallet") // Paramos aqui !!
-	public ResponseEntity<UserDTO> createWallet(@PathVariable(name = "id") Long id){
-		UserDTO userDTO = new UserDTO(serviceUser.findByIdUser(id));
+	@PostMapping("/{id}/add/wallet") // Ver por que não retorna o com wallet
+	public ResponseEntity<?> createWallet(@PathVariable(name = "id") Long id){
 		serviceWallet.createWallet(serviceUser.findByIdUser(id));
-		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.FOUND);	
+		return getUserPageId(id);
 	}
 	
-	// Adiciona uma receita pelo ID do User
+	// Adiciona uma aplicação pelo ID do User
 	@PostMapping("/{id}/add/app")
 	public ResponseEntity<AplicationDTO> createApp(@PathVariable(name = "id") Long id, @Valid @RequestBody Aplication app){
 		serviceAplication.save(id, app);
@@ -56,7 +62,7 @@ public class UserController {
 	}
 	
 	
-	// Deleta uma despesa pelo Id do Gain
+	// Deleta uma aplicação pelo Id do App
 	@DeleteMapping("/delete/app/{id}")
 	public ResponseEntity<AplicationDTO> deleteapp(@PathVariable(name = "id") Long id){
 		serviceAplication.delete(id);

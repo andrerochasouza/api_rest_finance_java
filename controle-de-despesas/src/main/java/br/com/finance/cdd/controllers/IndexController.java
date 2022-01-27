@@ -24,15 +24,14 @@ import br.com.finance.cdd.service.UserServices;
 @RestController
 @RequestMapping("/")
 public class IndexController {
-	
+
 	@Autowired
 	private UserServices serviceUser;
 
 	// Retorna UserPage de UsersForm (Lista todos os Usuários não deletados)
-	@GetMapping()
+	@GetMapping
 	public ResponseEntity<Page<UserDTO>> indexPage(
-			@RequestParam(name = "numPage", required = false) Integer numPage) {
-
+			@RequestParam(name = "numpage", required = false) Integer numPage) {
 
 		Pageable page;
 		if(numPage != null)
@@ -46,7 +45,7 @@ public class IndexController {
 
 	// Adiciona um novo User (Sem carteira)
 	@PostMapping
-	public ResponseEntity<UserForm> addUser(@RequestBody UserForm userForm) {
+	public ResponseEntity<UserForm> addUser(@Valid @RequestBody UserForm userForm) {
 		serviceUser.saveUserForm(userForm);
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.CREATED);
 	}
@@ -61,7 +60,7 @@ public class IndexController {
 
 	// Alterar um User,
 	@RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH})
-	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "id" , required = true) Long id, @Valid @RequestBody UserForm userForm){
+	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "id" , required = true) Long id, @RequestBody UserForm userForm){
 		serviceUser.updateUserForm(id, userForm);
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.ACCEPTED);
 	}

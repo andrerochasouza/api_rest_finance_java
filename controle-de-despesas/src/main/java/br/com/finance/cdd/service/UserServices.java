@@ -24,15 +24,12 @@ public class UserServices {
 	@Autowired
 	private WalletServices walletService;
 
-	
 	// Regras de negócio
-
-
 
 	// Retorna um User não deletado
 	public User findByIdUser(Long id) {
 		User user = userRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
 		if (user.getDateDelete() == null) {
 			return user;
 		} else {
@@ -52,19 +49,12 @@ public class UserServices {
 
 	// Retorna Lista de UsersDTO sem users deletados
 	public Page<UserDTO> findAllUserDTO(Pageable pageable) {
-		Page<User> users = userRepository.findAll(pageable);
-		List<UserDTO> usersForm = users.stream()
-									.filter(x -> x.getDateDelete() == null)
-									.map(x -> new UserDTO(x))
-									.collect(Collectors.toList());
+		List<User> users = userRepository.findAll();
+		List<UserDTO> usersForm = users.stream().filter(x -> x.getDateDelete() == null).map(x -> new UserDTO(x))
+				.collect(Collectors.toList());
 
 		return new PageImpl<UserDTO>(usersForm);
 	}
-
-	// Salva um User 
-		private void saveUser(User user) {
-			userRepository.save(user);
-		}
 
 	// Salva um UserForm
 	public void saveUserForm(UserForm userForm) {
@@ -72,18 +62,28 @@ public class UserServices {
 		this.saveUser(user);
 	}
 
-	// Update um UserDTO (PATCH OR PUT) (Não altera um usuário deletado)
-		public void updateUserForm(Long id, UserForm userForm) {
-			User user = findByIdUser(id);
-			user.convertToUser(userForm);
+	// Update um UserForm (PATCH OR PUT) (Não altera um usuário deletado)
+	public void updateUserForm(Long id, UserForm userForm) {
+		User user = findByIdUser(id);
+		if (userForm.getName() != null) {
+			user.setName(userForm.getName());
 		}
+		if (userForm.getCpf() != null) {
+			user.setCpf(userForm.getCpf());
+		}
+		this.saveUser(user);
+	}
 
 	// Deleta um User
 	public void deleteUserById(Long id) {
 		User user = findByIdUser(id);
 		user.setDateDelete(new Date());
 		walletService.deleteWallet(user);
-		userRepository.save(user);
+		this.saveUser(user);
 	}
 
+	// Salva um User
+	private void saveUser(User user) {
+		userRepository.save(user);
+	}
 }

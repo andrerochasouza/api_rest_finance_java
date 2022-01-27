@@ -21,6 +21,7 @@ public class WalletServices {
 	@Autowired
 	private AplicationServices appService;
 	
+	
 	// Retorna um Wallet (Sem os app deletado)
 	public Wallet findByidWallet(Long idWallet) {
 		Wallet wallet = walletRepository.findById(idWallet)
@@ -38,29 +39,26 @@ public class WalletServices {
 		}
 	}
 	
-	// Cria um Wallet
-	public void createWallet(User user) { // desenhar lógica depois
-		
-		if(user.getWallet() != null) {
-			throw new ResourceNotFoundException("Wallet Found");
-			
-		} else if(user.getWallet() == null) {
-			user.getWallet().setDateDelete(null);
-			walletRepository.save(user.getWallet());
-			
-		} else {
+	
+	// Cria um Wallet (Ou retorna o dateDelete para null)
+	public void createWallet(User user) {
+		if(user.getWallet() == null) {
 			Wallet wallet = new Wallet();
 			wallet.setUser(user);
 			wallet.setSaldo(0.0);
-			
 			walletRepository.save(wallet);
+		} else {
+			if(user.getWallet().getDateDelete() == null) {
+				throw new ResourceNotFoundException("Wallet Found");	
+			} else {
+				user.getWallet().setDateDelete(null);
+				walletRepository.save(user.getWallet());
+			}
 		}
-		
-		
-		
 	}
 	
-	// Deleta um Wallet (Deleta as APP)
+	
+	// Deleta um Wallet (Também deleta as APP)
 	public void deleteWallet(User user) { 
 		if(user.getWallet() != null && user.getWallet().getDateDelete() == null) {
 			user.getWallet().getAplications().stream()
