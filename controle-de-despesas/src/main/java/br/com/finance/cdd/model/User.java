@@ -114,7 +114,7 @@ public class User {
 				&& Objects.equals(wallet, other.wallet);
 	}
 
-	public User convertToUser(UserForm userForm){
+	public User convertToUser(UserForm userForm) {
 		return new User(userForm.getName(), userForm.getCpf(), getDateCreation(), getDateDelete(), null);
 	}
 }

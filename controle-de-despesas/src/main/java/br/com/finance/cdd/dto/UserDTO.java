@@ -8,15 +8,11 @@ public class UserDTO {
 	private String name;
 	private Double walletValue;
 	private String cpf;
-	
+
 	public UserDTO(User user) {
 		this.idUser = user.getId();
 		this.name = user.getName();
-		if(user.getWallet() == null) {
-			this.walletValue = null;
-		} else {
-			this.walletValue = user.getWallet().getSaldo();
-		}
+		this.walletValue = this.walletValueUser(user);
 		this.cpf = user.getCpf();
 	}
 
@@ -34,5 +30,13 @@ public class UserDTO {
 
 	public String getCpf() {
 		return cpf;
+	}
+
+	private Double walletValueUser(User user) {
+		if (user.getWallet() == null || user.getWallet().getDateDelete() != null) {
+			return null;
+		} else {
+			return user.getWallet().getSaldo();
+		}
 	}
 }

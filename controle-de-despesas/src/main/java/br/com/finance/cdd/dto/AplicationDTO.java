@@ -10,7 +10,7 @@ public class AplicationDTO {
 	private Double value;
 	private AplicationEnum typeAplication;
 	private String descricao;
-	
+
 	public AplicationDTO(Aplication aplication) {
 		this.idApp = aplication.getId();
 		this.name = aplication.getName();
@@ -30,7 +30,7 @@ public class AplicationDTO {
 	public Double getValue() {
 		return value;
 	}
-	
+
 	public AplicationEnum getTypeAplication() {
 		return typeAplication;
 	}

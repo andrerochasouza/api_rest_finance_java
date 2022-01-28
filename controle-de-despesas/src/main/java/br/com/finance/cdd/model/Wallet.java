@@ -117,5 +117,4 @@ public class Wallet {
 				&& Objects.equals(user, other.user);
 	}
 
-	
 }

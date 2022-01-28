@@ -1,6 +1,5 @@
 package br.com.finance.cdd.form;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -8,22 +7,22 @@ public class UserForm {
 
 	@NotNull
 	@NotBlank
-    private String name;
+	private String name;
 	@NotNull
 	@NotBlank
-    private String cpf;
+	private String cpf;
 
-    public UserForm(String name, String cpf) {
-        this.name = name;
-        this.cpf = cpf;
-    }
+	public UserForm(String name, String cpf) {
+		this.name = name;
+		this.cpf = cpf;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getCpf() {
-        return cpf;
-    }
+	public String getCpf() {
+		return cpf;
+	}
 
 }

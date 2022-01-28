@@ -48,7 +48,7 @@ public class UserServices {
 	}
 
 	// Retorna Lista de UsersDTO sem users deletados
-	public Page<UserDTO> findAllUserDTO(Pageable pageable) {
+	public Page<UserDTO> findAllUserDTO(Pageable pageable) { // Verificar o List para Page
 		List<User> users = userRepository.findAll();
 		List<UserDTO> usersForm = users.stream().filter(x -> x.getDateDelete() == null).map(x -> new UserDTO(x))
 				.collect(Collectors.toList());

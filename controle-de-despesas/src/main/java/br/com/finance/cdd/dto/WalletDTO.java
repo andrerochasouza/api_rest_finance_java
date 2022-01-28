@@ -11,8 +11,7 @@ public class WalletDTO {
 	private Double walletValue;
 	private String nameUser;
 	private List<AplicationDTO> aplicationsDTO;
-	
-	
+
 	public WalletDTO(Wallet wallet) {
 		this.idUser = wallet.getUser().getId();
 		this.walletValue = wallet.getSaldo();
@@ -20,30 +19,28 @@ public class WalletDTO {
 		this.aplicationsDTO = this.convertToListAplicationDTO(wallet);
 	}
 
-
 	public Long getIdUser() {
 		return idUser;
 	}
-
 
 	public Double getWalletValue() {
 		return walletValue;
 	}
 
-
 	public String getNameUser() {
 		return nameUser;
 	}
 
-
 	public List<AplicationDTO> getAplicationsDTO() {
 		return aplicationsDTO;
 	}
-	
-	private List<AplicationDTO> convertToListAplicationDTO(Wallet wallet){
-		return wallet.getAplications().stream()
-				 .filter(x -> x.getDateDelete() == null)
-				 .map(x -> new AplicationDTO(x)).collect(Collectors.toList());
+
+	private List<AplicationDTO> convertToListAplicationDTO(Wallet wallet) {
+		if (wallet.getAplications() == null) {
+			return null;
+		}
+		return wallet.getAplications().stream().filter(x -> x.getDateDelete() == null).map(x -> new AplicationDTO(x))
+				.collect(Collectors.toList());
 	}
-	
+
 }

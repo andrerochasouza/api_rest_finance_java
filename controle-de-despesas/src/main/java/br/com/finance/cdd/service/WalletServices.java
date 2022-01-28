@@ -20,51 +20,58 @@ public class WalletServices {
 	private WalletRepository walletRepository;
 	@Autowired
 	private AplicationServices appService;
-	
-	
+
 	// Retorna um Wallet (Sem os app deletado)
 	public Wallet findByidWallet(Long idWallet) {
 		Wallet wallet = walletRepository.findById(idWallet)
-						.orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found By ID: " + idWallet));
-		
-		if(wallet.getDateDelete() == null){
-			List<Aplication> aplicationsOffDelete = wallet.getAplications().stream().filter(
-					x -> x.getDateDelete() == null).collect(Collectors.toList()
-			);
+				.orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found By ID: " + idWallet));
+
+		if (wallet.getDateDelete() == null) {
+			List<Aplication> aplicationsOffDelete = wallet.getAplications().stream()
+					.filter(x -> x.getDateDelete() == null).collect(Collectors.toList());
 
 			wallet.setAplications(aplicationsOffDelete);
+
+//			Double walletValue = wallet.getAplications().stream(). // calculo do value da carteira
 			return wallet;
 		} else {
 			throw new ResourceNotFoundException("Wallet Not Found");
 		}
 	}
-	
-	
+
 	// Cria um Wallet (Ou retorna o dateDelete para null)
-	public void createWallet(User user) {
-		if(user.getWallet() == null) {
+	public Wallet createWallet(User user) {
+		if (user.getWallet() == null) {
 			Wallet wallet = new Wallet();
 			wallet.setUser(user);
 			wallet.setSaldo(0.0);
 			walletRepository.save(wallet);
+			return wallet;
 		} else {
-			if(user.getWallet().getDateDelete() == null) {
-				throw new ResourceNotFoundException("Wallet Found");	
+			if (user.getWallet().getDateDelete() == null) {
+				throw new ResourceNotFoundException("Wallet Found");
 			} else {
 				user.getWallet().setDateDelete(null);
 				walletRepository.save(user.getWallet());
+				return user.getWallet();
 			}
 		}
 	}
-	
-	
+
 	// Deleta um Wallet (Também deleta as APP)
-	public void deleteWallet(User user) { 
-		if(user.getWallet() != null && user.getWallet().getDateDelete() == null) {
-			user.getWallet().getAplications().stream()
-									.filter(x -> x.getDateDelete() == null)
-									.forEach(x -> appService.delete(x.getId()));
+	public void deleteWallet(User user) {
+		if (user.getWallet() == null) {
+			throw new ResourceNotFoundException("Wallet is Null");
+		}
+
+		if (user.getWallet().getDateDelete() == null) {
+			if (user.getWallet().getAplications() != null) {
+				user.getWallet().getAplications().stream().filter(x -> x.getDateDelete() == null)
+						.forEach(x -> appService.deleteApp(x.getId()));
+			}
 			user.getWallet().setDateDelete(new Date());
+			walletRepository.save(user.getWallet());
+
 		}
 	}
 }

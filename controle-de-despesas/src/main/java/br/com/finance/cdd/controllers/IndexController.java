@@ -30,11 +30,10 @@ public class IndexController {
 
 	// Retorna UserPage de UsersForm (Lista todos os Usuários não deletados)
 	@GetMapping
-	public ResponseEntity<Page<UserDTO>> indexPage(
-			@RequestParam(name = "numpage", required = false) Integer numPage) {
+	public ResponseEntity<Page<UserDTO>> indexPage(@RequestParam(name = "numpage", required = false) Integer numPage) {
 
 		Pageable page;
-		if(numPage != null)
+		if (numPage != null)
 			page = PageRequest.of(numPage - 1, 5);
 		else
 			page = PageRequest.of(0, 5);
@@ -50,7 +49,7 @@ public class IndexController {
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.CREATED);
 	}
 
-	// Deleta um User 
+	// Deleta um User
 	@DeleteMapping
 	public ResponseEntity<UserDTO> deleteUser(@RequestParam(name = "id", required = true) Long id) {
 		UserDTO userDTO = new UserDTO(serviceUser.findByIdUser(id));
@@ -59,8 +58,9 @@ public class IndexController {
 	}
 
 	// Alterar um User,
-	@RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH})
-	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "id" , required = true) Long id, @RequestBody UserForm userForm){
+	@RequestMapping(method = { RequestMethod.PUT, RequestMethod.PATCH })
+	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "id", required = true) Long id,
+			@RequestBody UserForm userForm) {
 		serviceUser.updateUserForm(id, userForm);
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.ACCEPTED);
 	}

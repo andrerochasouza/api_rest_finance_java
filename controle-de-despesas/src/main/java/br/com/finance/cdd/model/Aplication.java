@@ -30,7 +30,7 @@ public class Aplication {
 
 	@Min(0)
 	@NotNull
-	private double value;
+	private Double value;
 
 	@Enumerated(EnumType.STRING)
 	private AplicationEnum typeAplication;
