@@ -16,6 +16,12 @@ public class AplicationServices {
 	@Autowired
 	private AplicationRepository appRepository;
 
+	// Retorna um Aplication pelo Id
+		public Aplication findById(Long id) {
+			return this.findByIdApp(id);
+
+		}
+	
 	// Salva uma Aplciation
 	public void addApp(Aplication app) {
 		appRepository.save(app);
@@ -34,7 +40,7 @@ public class AplicationServices {
 	}
 
 	// Retorna um AplicationDTO pelo Id
-	public AplicationDTO findById(Long id) {
+	public AplicationDTO findByIdDTO(Long id) {
 		Aplication app = findByIdApp(id);
 		return new AplicationDTO(app);
 	}

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.model.Aplication;
+import br.com.finance.cdd.model.AplicationEnum;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.model.Wallet;
 import br.com.finance.cdd.repository.WalletRepository;
@@ -29,10 +30,7 @@ public class WalletServices {
 		if (wallet.getDateDelete() == null) {
 			List<Aplication> aplicationsOffDelete = wallet.getAplications().stream()
 					.filter(x -> x.getDateDelete() == null).collect(Collectors.toList());
-
 			wallet.setAplications(aplicationsOffDelete);
-
-//			Double walletValue = wallet.getAplications().stream(). // calculo do value da carteira
 			return wallet;
 		} else {
 			throw new ResourceNotFoundException("Wallet Not Found");
@@ -61,7 +59,7 @@ public class WalletServices {
 	// Deleta um Wallet (Também deleta as APP)
 	public void deleteWallet(User user) {
 		if (user.getWallet() == null) {
-			throw new ResourceNotFoundException("Wallet is Null");
+			return;
 		}
 
 		if (user.getWallet().getDateDelete() == null) {
@@ -69,9 +67,41 @@ public class WalletServices {
 				user.getWallet().getAplications().stream().filter(x -> x.getDateDelete() == null)
 						.forEach(x -> appService.deleteApp(x.getId()));
 			}
+			user.getWallet().setSaldo(0.0);
 			user.getWallet().setDateDelete(new Date());
 			walletRepository.save(user.getWallet());
 
 		}
 	}
+	
+	// Adiciona o valor no saldo
+	public void addAppToWallet(Aplication app) {
+		
+		Wallet wallet = app.getWallet();
+		if(app.getTypeAplication().equals(AplicationEnum.RECEITA)) {
+			wallet.setSaldo(wallet.getSaldo() + app.getValue());
+			walletRepository.save(wallet);
+		} else{
+			wallet.setSaldo(wallet.getSaldo() - app.getValue());
+			walletRepository.save(wallet);
+		}
+		
+	}
+	
+	// Adiciona o valor no saldo
+	public void deleteAppToWallet(Aplication app) {
+			
+		Wallet wallet = app.getWallet();
+		if(app.getTypeAplication().equals(AplicationEnum.RECEITA)) {
+			wallet.setSaldo(wallet.getSaldo() - app.getValue());
+			walletRepository.save(wallet);
+		} else if(app.getTypeAplication().equals(AplicationEnum.DESPESA)){
+			wallet.setSaldo(wallet.getSaldo() + app.getValue());
+			walletRepository.save(wallet);
+		} else {
+			throw new ResourceNotFoundException("Aplication Not Found");
+		}
+
+	}
+	
 }

@@ -51,7 +51,7 @@ public class IndexController {
 
 	// Deleta um User
 	@DeleteMapping
-	public ResponseEntity<UserDTO> deleteUser(@RequestParam(name = "id", required = true) Long id) {
+	public ResponseEntity<UserDTO> deleteUser(@RequestParam(name = "iduser", required = true) Long id) {
 		UserDTO userDTO = new UserDTO(serviceUser.findByIdUser(id));
 		serviceUser.deleteUserById(id);
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
@@ -59,7 +59,7 @@ public class IndexController {
 
 	// Alterar um User,
 	@RequestMapping(method = { RequestMethod.PUT, RequestMethod.PATCH })
-	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "id", required = true) Long id,
+	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "iduser", required = true) Long id,
 			@RequestBody UserForm userForm) {
 		serviceUser.updateUserForm(id, userForm);
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.ACCEPTED);

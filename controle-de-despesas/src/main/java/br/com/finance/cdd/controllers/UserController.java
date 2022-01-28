@@ -73,9 +73,11 @@ public class UserController {
 			@Valid @RequestBody AplicationForm appForm) {
 		User user = serviceUser.findByIdUser(idUser);
 		Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());
+		
 		Aplication app = new Aplication(appForm.getName(), appForm.getValue(), appForm.getTypeAplication(), new Date(),
 				wallet, null, appForm.getDescricao());
 		serviceAplication.addApp(app);
+		serviceWallet.addAppToWallet(app);
 		AplicationDTO appDTO = new AplicationDTO(app);
 		return new ResponseEntity<AplicationDTO>(appDTO, HttpStatus.CREATED);
 	}
@@ -84,7 +86,9 @@ public class UserController {
 	@DeleteMapping("{id}/delete/app")
 	public ResponseEntity<AplicationDTO> deleteapp(@RequestParam(value = "idapp") Long idApp) {
 		serviceAplication.deleteApp(idApp);
-		AplicationDTO appDTO = serviceAplication.findById(idApp);
+		Aplication app = serviceAplication.findById(idApp);
+		serviceWallet.deleteAppToWallet(app);
+		AplicationDTO appDTO = serviceAplication.findByIdDTO(idApp);
 		return new ResponseEntity<AplicationDTO>(appDTO, HttpStatus.OK);
 	}
 
