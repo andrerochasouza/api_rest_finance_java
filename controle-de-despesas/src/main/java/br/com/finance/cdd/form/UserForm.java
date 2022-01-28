@@ -1,44 +1,28 @@
 package br.com.finance.cdd.form;
 
 import javax.validation.constraints.NotBlank;
-
-import br.com.finance.cdd.model.User;
+import javax.validation.constraints.NotNull;
 
 public class UserForm {
-	
-	private Long id;
-	
+
+	@NotNull
 	@NotBlank
 	private String name;
-	
-	private Double wallet = 0.0;
-	
+	@NotNull
 	@NotBlank
 	private String cpf;
-	
-	public UserForm() {
-	}
-	
-	public UserForm(User user) {
-		this.id = user.getId();
-		this.name = user.getName();
-		this.wallet = user.getWallet();
-		this.cpf = user.getCpf();
-	}
 
-	public Long getId() {
-		return id;
+	public UserForm(String name, String cpf) {
+		this.name = name;
+		this.cpf = cpf;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public Double getWallet() {
-		return wallet;
-	}
-	
 	public String getCpf() {
 		return cpf;
-	}		
+	}
+
 }

@@ -1,45 +1,42 @@
 package br.com.finance.cdd.dto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import br.com.finance.cdd.model.User;
 
 public class UserDTO {
 
-	private Long id;
+	private Long idUser;
 	private String name;
-	private Double wallet;
-	private List<PayDTO> paysDTO;
-	private List<GainDTO> gainsDTO;
-	
+	private Double walletValue;
+	private String cpf;
 
 	public UserDTO(User user) {
-		this.id = user.getId();
+		this.idUser = user.getId();
 		this.name = user.getName();
-		this.wallet = user.getWallet();
-		this.paysDTO = user.getPays().stream().map(x -> new PayDTO(x)).collect(Collectors.toList());
-		this.gainsDTO = user.getGains().stream().map(x -> new GainDTO(x)).collect(Collectors.toList());
+		this.walletValue = this.walletValueUser(user);
+		this.cpf = user.getCpf();
 	}
 
-	public Long getId() {
-		return id;
+	public Long getIdUser() {
+		return idUser;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public Double getWallet() {
-		return wallet;
+	public Double getWalletValue() {
+		return walletValue;
 	}
 
-	public List<PayDTO> getPaysDTO() {
-		return paysDTO;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public List<GainDTO> getGainsDTO() {
-		return gainsDTO;
+	private Double walletValueUser(User user) {
+		if (user.getWallet() == null || user.getWallet().getDateDelete() != null) {
+			return null;
+		} else {
+			return user.getWallet().getSaldo();
+		}
 	}
-	
 }

@@ -1,7 +1,8 @@
 package br.com.finance.cdd.model;
 
+import br.com.finance.cdd.form.UserForm;
+
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -27,47 +28,23 @@ public class User {
 	@NotBlank
 	private String cpf;
 
-
-	private double wallet = 0.0;
-
 	private Date dateCreation = new Date();
 
+	private Date dateDelete = null;
 
-	private Date dateDelete;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	private List<Pay> pays;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	private List<Gain> gains;
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+	private Wallet wallet;
 
 	public User() {
 	}
 
-	public User(String name, String cpf, double wallet, Date dateCreation,
-			Date dateDelete, List<Pay> pays, List<Gain> gains) {
+	public User(@NotBlank String name, @NotBlank String cpf, Date dateCreation, Date dateDelete, Wallet wallet) {
 		super();
 		this.name = name;
 		this.cpf = cpf;
-		this.wallet = wallet;
 		this.dateCreation = dateCreation;
 		this.dateDelete = dateDelete;
-		this.pays = pays;
-		this.gains = gains;
-	}
-	
-
-	// Getters, Setters, HashCode and equals
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
+		this.wallet = wallet;
 	}
 
 	public long getId() {
@@ -94,14 +71,6 @@ public class User {
 		this.cpf = cpf;
 	}
 
-	public double getWallet() {
-		return wallet;
-	}
-
-	public void setWallet(double wallet) {
-		this.wallet = wallet;
-	}
-
 	public Date getDateCreation() {
 		return dateCreation;
 	}
@@ -118,30 +87,34 @@ public class User {
 		this.dateDelete = dateDelete;
 	}
 
-	public List<Pay> getPays() {
-		return pays;
+	public Wallet getWallet() {
+		return wallet;
 	}
 
-	public void setPays(List<Pay> pays) {
-		this.pays = pays;
+	public void setWallet(Wallet wallet) {
+		this.wallet = wallet;
 	}
 
-	public List<Gain> getGains() {
-		return gains;
+	@Override
+	public int hashCode() {
+		return Objects.hash(cpf, dateCreation, dateDelete, id, name, wallet);
 	}
-
-	public void setGains(List<Gain> gains) {
-		this.gains = gains;
-	}
-	
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if ((obj == null) || (getClass() != obj.getClass()))
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return id == other.id;
+		return Objects.equals(cpf, other.cpf) && Objects.equals(dateCreation, other.dateCreation)
+				&& Objects.equals(dateDelete, other.dateDelete) && id == other.id && Objects.equals(name, other.name)
+				&& Objects.equals(wallet, other.wallet);
+	}
+
+	public User convertToUser(UserForm userForm) {
+		return new User(userForm.getName(), userForm.getCpf(), getDateCreation(), getDateDelete(), null);
 	}
 }
