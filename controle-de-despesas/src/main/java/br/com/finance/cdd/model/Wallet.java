@@ -24,7 +24,7 @@ public class Wallet {
 	private long id;
 
 	@NotNull
-	private double saldo;
+	private double value;
 
 	private Date dateInit = new Date();
 
@@ -40,9 +40,9 @@ public class Wallet {
 	public Wallet() {
 	}
 
-	public Wallet(@NotNull double saldo, Date dateInit, User user, List<Aplication> aplications, Date dateDelete) {
+	public Wallet(@NotNull double value, Date dateInit, User user, List<Aplication> aplications, Date dateDelete) {
 		super();
-		this.saldo = saldo;
+		this.value = value;
 		this.dateInit = dateInit;
 		this.user = user;
 		this.aplications = aplications;
@@ -57,12 +57,12 @@ public class Wallet {
 		this.id = id;
 	}
 
-	public double getSaldo() {
-		return saldo;
+	public double getValue() {
+		return value;
 	}
 
-	public void setSaldo(double saldo) {
-		this.saldo = saldo;
+	public void setValue(double value) {
+		this.value = value;
 	}
 
 	public Date getDateInit() {
@@ -99,7 +99,7 @@ public class Wallet {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(aplications, dateDelete, dateInit, id, saldo, user);
+		return Objects.hash(aplications, dateDelete, dateInit, id, value, user);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class Wallet {
 		Wallet other = (Wallet) obj;
 		return Objects.equals(aplications, other.aplications) && Objects.equals(dateDelete, other.dateDelete)
 				&& Objects.equals(dateInit, other.dateInit) && id == other.id
-				&& Double.doubleToLongBits(saldo) == Double.doubleToLongBits(other.saldo)
+				&& Double.doubleToLongBits(value) == Double.doubleToLongBits(other.value)
 				&& Objects.equals(user, other.user);
 	}
 

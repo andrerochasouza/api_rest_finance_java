@@ -36,7 +36,7 @@ public class UserDTO {
 		if (user.getWallet() == null || user.getWallet().getDateDelete() != null) {
 			return null;
 		} else {
-			return user.getWallet().getSaldo();
+			return user.getWallet().getValue();
 		}
 	}
 }

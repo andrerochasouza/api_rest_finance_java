@@ -14,7 +14,7 @@ public class WalletDTO {
 
 	public WalletDTO(Wallet wallet) {
 		this.idUser = wallet.getUser().getId();
-		this.walletValue = wallet.getSaldo();
+		this.walletValue = wallet.getValue();
 		this.nameUser = wallet.getUser().getName();
 		this.aplicationsDTO = this.convertToListAplicationDTO(wallet);
 	}
