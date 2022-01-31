@@ -1,7 +1,5 @@
 package br.com.finance.cdd.model;
 
-import br.com.finance.cdd.form.UserForm;
-
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.Length;
+
+import br.com.finance.cdd.form.UserForm;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +28,7 @@ public class User {
 	private String name;
 
 	@NotBlank
+	@Length(max = 14)
 	private String cpf;
 
 	private Date dateCreation = new Date();
