@@ -84,6 +84,7 @@ public class WalletServices {
 	}
 	
 	
+	
 	// Otimização de código
 	private void AppToWallet(Aplication app, boolean typeApp) {
 		
