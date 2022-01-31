@@ -2,6 +2,7 @@ package br.com.finance.cdd.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,10 @@ public class WalletServices {
 		Wallet wallet = walletRepository.findById(idWallet)
 				.orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found By ID: " + idWallet));
 
-		if (wallet.getDateDelete() == null) {
+		
+		// Objects.requireNonNull(wallet.getDateDelete());
+		
+		if (Objects.isNull(wallet.getDateDelete())) {
 			List<Aplication> aplicationsOffDelete = wallet.getAplications().stream()
 					.filter(x -> x.getDateDelete() == null).collect(Collectors.toList());
 			wallet.setAplications(aplicationsOffDelete);
