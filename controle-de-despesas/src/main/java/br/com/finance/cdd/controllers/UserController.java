@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -90,6 +91,14 @@ public class UserController {
 		serviceWallet.deleteAppToWallet(app);
 		AplicationDTO appDTO = serviceAplication.findByIdDTO(idApp);
 		return new ResponseEntity<AplicationDTO>(appDTO, HttpStatus.OK);
+	}
+	
+	// Altera uma aplicação pelo Id do App
+	@RequestMapping(method = { RequestMethod.PUT, RequestMethod.PATCH })
+	public ResponseEntity<AplicationForm> updateApp(@RequestParam(name = "idapp", required = true) Long idApp,
+			@RequestBody AplicationForm appForm) {
+		serviceWallet.updateAppForm(idApp, appForm);
+		return new ResponseEntity<AplicationForm>(appForm, HttpStatus.ACCEPTED);
 	}
 
 }

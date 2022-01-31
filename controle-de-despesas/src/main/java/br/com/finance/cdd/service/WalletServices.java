@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.finance.cdd.error.ResourceNotFoundException;
+import br.com.finance.cdd.form.AplicationForm;
 import br.com.finance.cdd.model.Aplication;
+import br.com.finance.cdd.model.AplicationEnum;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.model.Wallet;
 import br.com.finance.cdd.repository.WalletRepository;
@@ -73,12 +75,37 @@ public class WalletServices {
 		}
 	}
 	
-	// Adiciona o valor no saldo
+	// Altera o valor da wallet
+	public void updateAppForm(Long idAapp, AplicationForm appForm) {
+		Aplication app = appService.findById(idAapp);
+		
+		if(!appForm.getName().equals(null)) {
+			app.setName(appForm.getName());
+		}
+		
+		if(!appForm.getDescricao().equals(null)) {
+			app.setDescricao(appForm.getDescricao());
+		}
+		
+		if(!appForm.getTypeAplication().equals(null)) {
+			app.setTypeAplication(appForm.getTypeAplication());
+		}
+		
+		if(!appForm.getValue().equals(null)) {
+			if(app.getTypeAplication().equals(AplicationEnum.RECEITA)) {
+				this.addAppToWallet(app);
+			}
+			
+		}
+
+	}
+	
+	// Adiciona o valor da wallet
 	public void addAppToWallet(Aplication app) {
 		this.AppToWallet(app, true);
 	}
 	
-	// Adiciona o valor no saldo
+	// Deleta o valor da wallet
 	public void deleteAppToWallet(Aplication app) {
 		this.AppToWallet(app, false);
 	}

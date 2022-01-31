@@ -19,7 +19,6 @@ public class AplicationServices {
 	// Retorna um Aplication pelo Id
 		public Aplication findById(Long id) {
 			return this.findByIdApp(id);
-
 		}
 	
 	// Salva uma Aplciation
