@@ -59,8 +59,11 @@ public class UserServices {
 
 	// Salva um UserForm
 	public void saveUserForm(UserForm userForm) {
-		User user = new User().convertToUser(userForm);
-		this.saveUser(user);
+		Integer cpf = userRepository.findCountCpf(userForm.getCpf());
+		if (cpf == 0){
+			User user = new User().convertToUser(userForm);
+			this.saveUser(user);
+		}
 	}
 
 	// Update um UserForm (PATCH OR PUT) (Não altera um usuário deletado)
@@ -69,8 +72,16 @@ public class UserServices {
 		if (Objects.nonNull(userForm.getName())) {
 			user.setName(userForm.getName());
 		}
-		if (Objects.nonNull(userForm.getCpf())) {
-			user.setCpf(userForm.getCpf());
+
+		if (Objects.isNull(userForm.getCpf()) || user.getCpf().equals(userForm.getCpf())) {
+			this.saveUser(user);
+		} else {
+			Integer cpf = userRepository.findCountCpf(userForm.getCpf());
+			if(cpf == 0){
+				user.setCpf(userForm.getCpf());
+			} else {
+				throw new ResourceNotFoundException("CPF Já Cadastrado: " + userForm.getCpf());
+			}
 		}
 		this.saveUser(user);
 	}
