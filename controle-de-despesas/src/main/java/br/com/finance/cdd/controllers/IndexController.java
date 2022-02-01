@@ -57,7 +57,7 @@ public class IndexController {
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 	}
 
-	// Alterar um User,
+	// Alterar um User
 	@RequestMapping(method = { RequestMethod.PUT, RequestMethod.PATCH })
 	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "iduser", required = true) Long id,
 			@RequestBody UserForm userForm) {

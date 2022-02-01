@@ -28,6 +28,7 @@ public class WalletServices {
 	public Wallet findByidWallet(Long idWallet) {
 		Wallet wallet = walletRepository.findById(idWallet)
 				.orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found By ID: " + idWallet));
+		
 
 		if (Objects.isNull(wallet.getDateDelete())) {
 			List<Aplication> aplicationsOffDelete = wallet.getAplications().stream()
