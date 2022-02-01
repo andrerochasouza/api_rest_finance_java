@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.finance.cdd.error.ResourceNotFoundException;
+import br.com.finance.cdd.form.AplicationForm;
 import br.com.finance.cdd.model.Aplication;
+import br.com.finance.cdd.model.AplicationEnum;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.model.Wallet;
 import br.com.finance.cdd.repository.WalletRepository;
@@ -26,13 +28,11 @@ public class WalletServices {
 	public Wallet findByidWallet(Long idWallet) {
 		Wallet wallet = walletRepository.findById(idWallet)
 				.orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found By ID: " + idWallet));
+		
 
-		
-		// Objects.requireNonNull(wallet.getDateDelete());
-		
 		if (Objects.isNull(wallet.getDateDelete())) {
 			List<Aplication> aplicationsOffDelete = wallet.getAplications().stream()
-					.filter(x -> x.getDateDelete() == null).collect(Collectors.toList());
+					.filter(x -> Objects.isNull(x.getDateDelete())).collect(Collectors.toList());
 			wallet.setAplications(aplicationsOffDelete);
 			return wallet;
 		} else {
@@ -42,14 +42,14 @@ public class WalletServices {
 
 	// Cria um Wallet (Ou retorna o dateDelete para null)
 	public Wallet createWallet(User user) {
-		if (user.getWallet() == null) {
+		if (Objects.isNull(user.getWallet())) {
 			Wallet wallet = new Wallet();
 			wallet.setUser(user);
 			wallet.setValue(0.0);
 			walletRepository.save(wallet);
 			return wallet;
 		} else {
-			if (user.getWallet().getDateDelete() == null) {
+			if (Objects.isNull(user.getWallet().getDateDelete())) {
 				throw new ResourceNotFoundException("Wallet Found");
 			} else {
 				user.getWallet().setDateDelete(null);
@@ -61,13 +61,13 @@ public class WalletServices {
 
 	// Deleta um Wallet (Também deleta as APP)
 	public void deleteWallet(User user) {
-		if (user.getWallet() == null) {
+		if (Objects.isNull(user.getWallet())) {
 			return;
 		}
 
-		if (user.getWallet().getDateDelete() == null) {
-			if (user.getWallet().getAplications() != null) {
-				user.getWallet().getAplications().stream().filter(x -> x.getDateDelete() == null)
+		if (Objects.isNull(user.getWallet().getDateDelete())) {
+			if (Objects.nonNull(user.getWallet().getAplications())) {
+				user.getWallet().getAplications().stream().filter(x -> Objects.isNull(x.getDateDelete()))
 						.forEach(x -> appService.deleteApp(x.getId()));
 			}
 			user.getWallet().setValue(0.0);
@@ -77,12 +77,37 @@ public class WalletServices {
 		}
 	}
 	
-	// Adiciona o valor no saldo
+	// Altera o valor da wallet
+	public void updateAppForm(Long idAapp, AplicationForm appForm) {
+		Aplication app = appService.findById(idAapp);
+		
+		if(!appForm.getName().equals(null)) {
+			app.setName(appForm.getName());
+		}
+		
+		if(!appForm.getDescricao().equals(null)) {
+			app.setDescricao(appForm.getDescricao());
+		}
+		
+		if(!appForm.getTypeAplication().equals(null)) {
+			app.setTypeAplication(appForm.getTypeAplication());
+		}
+		
+		if(!appForm.getValue().equals(null)) {
+			if(app.getTypeAplication().equals(AplicationEnum.RECEITA)) {
+				this.addAppToWallet(app);
+			}
+			
+		}
+
+	}
+	
+	// Adiciona o valor da wallet
 	public void addAppToWallet(Aplication app) {
 		this.AppToWallet(app, true);
 	}
 	
-	// Adiciona o valor no saldo
+	// Deleta o valor da wallet
 	public void deleteAppToWallet(Aplication app) {
 		this.AppToWallet(app, false);
 	}

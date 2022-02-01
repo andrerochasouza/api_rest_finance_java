@@ -28,7 +28,7 @@ public class User {
 	private String name;
 
 	@NotBlank
-	@Length(max = 14)
+	@Length(min = 14 , max = 14)
 	private String cpf;
 
 	private Date dateCreation = new Date();

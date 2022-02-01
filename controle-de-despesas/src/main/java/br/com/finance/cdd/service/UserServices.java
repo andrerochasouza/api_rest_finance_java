@@ -2,6 +2,7 @@ package br.com.finance.cdd.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UserServices {
 	public User findByIdUser(Long id) {
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
-		if (user.getDateDelete() == null) {
+		if (Objects.isNull(user.getDateDelete())) {
 			return user;
 		} else {
 			throw new ResourceNotFoundException("User Not Found By ID: " + id);
@@ -40,7 +41,7 @@ public class UserServices {
 	public User findByNameUser(String name) {
 		User user = userRepository.findByName(name)
 				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By Name: " + name));
-		if (user.getDateDelete() == null) {
+		if (Objects.isNull(user.getDateDelete())) {
 			return user;
 		} else {
 			throw new ResourceNotFoundException("User Not Found By Name: " + name);
@@ -50,7 +51,7 @@ public class UserServices {
 	// Retorna Lista de UsersDTO sem users deletados
 	public Page<UserDTO> findAllUserDTO(Pageable pageable) { // Verificar o List para Page
 		List<User> users = userRepository.findAll();
-		List<UserDTO> usersForm = users.stream().filter(x -> x.getDateDelete() == null).map(x -> new UserDTO(x))
+		List<UserDTO> usersForm = users.stream().filter(x -> Objects.isNull(x.getDateDelete())).map(x -> new UserDTO(x))
 				.collect(Collectors.toList());
 
 		return new PageImpl<UserDTO>(usersForm);
@@ -65,10 +66,10 @@ public class UserServices {
 	// Update um UserForm (PATCH OR PUT) (Não altera um usuário deletado)
 	public void updateUserForm(Long id, UserForm userForm) {
 		User user = findByIdUser(id);
-		if (userForm.getName() != null) {
+		if (Objects.nonNull(userForm.getName())) {
 			user.setName(userForm.getName());
 		}
-		if (userForm.getCpf() != null) {
+		if (Objects.nonNull(userForm.getCpf())) {
 			user.setCpf(userForm.getCpf());
 		}
 		this.saveUser(user);

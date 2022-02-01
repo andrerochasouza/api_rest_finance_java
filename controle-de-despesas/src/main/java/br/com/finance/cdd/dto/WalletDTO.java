@@ -1,6 +1,7 @@
 package br.com.finance.cdd.dto;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import br.com.finance.cdd.model.Wallet;
@@ -36,10 +37,10 @@ public class WalletDTO {
 	}
 
 	private List<AplicationDTO> convertToListAplicationDTO(Wallet wallet) {
-		if (wallet.getAplications() == null) {
+		if (Objects.isNull(wallet.getAplications())) {
 			return null;
 		}
-		return wallet.getAplications().stream().filter(x -> x.getDateDelete() == null).map(x -> new AplicationDTO(x))
+		return wallet.getAplications().stream().filter(x -> Objects.isNull(x.getDateDelete())).map(x -> new AplicationDTO(x))
 				.collect(Collectors.toList());
 	}
 

@@ -1,5 +1,7 @@
 package br.com.finance.cdd.form;
 
+import java.util.Objects;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -42,5 +44,25 @@ public class AplicationForm {
 	public String getDescricao() {
 		return descricao;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(descricao, name, typeAplication, value);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AplicationForm other = (AplicationForm) obj;
+		return Objects.equals(descricao, other.descricao) && Objects.equals(name, other.name)
+				&& typeAplication == other.typeAplication && Objects.equals(value, other.value);
+	}
+	
+	
 
 }
