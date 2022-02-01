@@ -76,30 +76,40 @@ public class WalletServices {
 		}
 	}
 	
-	// Altera o valor da wallet
+	// Altera o aplication e valor da wallet
 	public void updateAppForm(Long idAapp, AplicationForm appForm) {
 		Aplication app = appService.findById(idAapp);
+		Wallet wallet = app.getWallet();
 		
-		if(!appForm.getName().equals(null)) {
+		if(Objects.nonNull(appForm.getName())) {
 			app.setName(appForm.getName());
 		}
 		
-		if(!appForm.getDescricao().equals(null)) {
+		if(Objects.nonNull(appForm.getDescricao())) {
 			app.setDescricao(appForm.getDescricao());
 		}
 		
-		if(!appForm.getTypeAplication().equals(null)) {
-			app.setTypeAplication(appForm.getTypeAplication());
+		if(Objects.nonNull(appForm.getValue())) {
+			if(app.getValue() >= appForm.getValue()) {
+				wallet.setValue(wallet.getValue() - (app.getValue() - appForm.getValue()));
+			} else {
+				wallet.setValue(wallet.getValue() + (appForm.getValue()) - app.getValue());
+			}
+			app.setValue(appForm.getValue());
 		}
 		
-		if(!appForm.getValue().equals(null)) {
+		if(Objects.nonNull(appForm.getTypeAplication())) {
+			app.setTypeAplication(appForm.getTypeAplication());
 			if(app.getTypeAplication().equals(AplicationEnum.RECEITA)) {
-				this.addAppToWallet(app);
+				wallet.setValue(wallet.getValue() + (2 * app.getValue()));
+			} else {
+				wallet.setValue(wallet.getValue() - (2 * app.getValue()));
 			}
-			
 		}
-
+		appService.updateApp(app);
+		walletRepository.save(wallet);
 	}
+	
 	
 	// Adiciona o valor da wallet
 	public void addAppToWallet(Aplication app) {
