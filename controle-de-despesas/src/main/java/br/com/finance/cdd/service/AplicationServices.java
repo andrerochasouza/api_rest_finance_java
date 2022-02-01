@@ -44,11 +44,21 @@ public class AplicationServices {
 		Aplication app = findByIdApp(id);
 		return new AplicationDTO(app);
 	}
+	
+	public void updateApp(Aplication app) {
+		if(Objects.nonNull(app)) {
+			appRepository.save(app);
+		} else {
+			throw new ResourceNotFoundException("Aplication Not Found");
+		}
+	}
+
 
 	// Otimizaação de código
 	private Aplication findByIdApp(Long id) {
 		return appRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
 	}
+
 
 }
