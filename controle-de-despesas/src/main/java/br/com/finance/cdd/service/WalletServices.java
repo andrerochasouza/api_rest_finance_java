@@ -2,6 +2,7 @@ package br.com.finance.cdd.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,9 @@ public class WalletServices {
 		Wallet wallet = walletRepository.findById(idWallet)
 				.orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found By ID: " + idWallet));
 
-		if (wallet.getDateDelete() == null) {
+		if (Objects.isNull(wallet.getDateDelete())) {
 			List<Aplication> aplicationsOffDelete = wallet.getAplications().stream()
-					.filter(x -> x.getDateDelete() == null).collect(Collectors.toList());
+					.filter(x -> Objects.isNull(x.getDateDelete())).collect(Collectors.toList());
 			wallet.setAplications(aplicationsOffDelete);
 			return wallet;
 		} else {
@@ -40,14 +41,14 @@ public class WalletServices {
 
 	// Cria um Wallet (Ou retorna o dateDelete para null)
 	public Wallet createWallet(User user) {
-		if (user.getWallet() == null) {
+		if (Objects.isNull(user.getWallet())) {
 			Wallet wallet = new Wallet();
 			wallet.setUser(user);
 			wallet.setValue(0.0);
 			walletRepository.save(wallet);
 			return wallet;
 		} else {
-			if (user.getWallet().getDateDelete() == null) {
+			if (Objects.isNull(user.getWallet().getDateDelete())) {
 				throw new ResourceNotFoundException("Wallet Found");
 			} else {
 				user.getWallet().setDateDelete(null);
@@ -59,13 +60,13 @@ public class WalletServices {
 
 	// Deleta um Wallet (Também deleta as APP)
 	public void deleteWallet(User user) {
-		if (user.getWallet() == null) {
+		if (Objects.isNull(user.getWallet())) {
 			return;
 		}
 
-		if (user.getWallet().getDateDelete() == null) {
-			if (user.getWallet().getAplications() != null) {
-				user.getWallet().getAplications().stream().filter(x -> x.getDateDelete() == null)
+		if (Objects.isNull(user.getWallet().getDateDelete())) {
+			if (Objects.nonNull(user.getWallet().getAplications())) {
+				user.getWallet().getAplications().stream().filter(x -> Objects.isNull(x.getDateDelete()))
 						.forEach(x -> appService.deleteApp(x.getId()));
 			}
 			user.getWallet().setValue(0.0);

@@ -1,5 +1,7 @@
 package br.com.finance.cdd.dto;
 
+import java.util.Objects;
+
 import br.com.finance.cdd.model.User;
 
 public class UserDTO {
@@ -33,7 +35,7 @@ public class UserDTO {
 	}
 
 	private Double walletValueUser(User user) {
-		if (user.getWallet() == null || user.getWallet().getDateDelete() != null) {
+		if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 			return null;
 		} else {
 			return user.getWallet().getValue();

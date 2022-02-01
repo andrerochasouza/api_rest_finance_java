@@ -1,6 +1,7 @@
 package br.com.finance.cdd.service;
 
 import java.util.Date;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class AplicationServices {
 	public void deleteApp(Long idApp) {
 		Aplication app = findByIdApp(idApp);
 
-		if (app.getDateDelete() == null) {
+		if (Objects.isNull(app.getDateDelete())) {
 			app.setDateDelete(new Date());
 			appRepository.save(app);
 		} else {
