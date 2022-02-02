@@ -39,6 +39,7 @@ public class WalletServices {
 			throw new ResourceNotFoundException("Wallet Not Found");
 		}
 	}
+	
 
 	// Cria um Wallet (Ou retorna o dateDelete para null)
 	public Wallet createWallet(User user) {

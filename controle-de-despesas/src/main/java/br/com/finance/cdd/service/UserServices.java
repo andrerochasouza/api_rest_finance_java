@@ -6,9 +6,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 import br.com.finance.cdd.dto.UserDTO;
@@ -49,12 +49,13 @@ public class UserServices {
 	}
 
 	// Retorna Lista de UsersDTO sem users deletados
-	public Page<UserDTO> findAllUserDTO(Pageable pageable) { // Verificar o List para Page
-		List<User> users = userRepository.findAll();
-		List<UserDTO> usersForm = users.stream().filter(x -> Objects.isNull(x.getDateDelete())).map(x -> new UserDTO(x))
+	public Slice<UserDTO> findAllUserDTO(Pageable pageable) { // Verificar o List para Page
+		List<User> users = userRepository.findAllByDateDeleteIsNull(pageable);
+		List<UserDTO> usersDTO = users.stream()
+				.map(x -> new UserDTO(x))
 				.collect(Collectors.toList());
 
-		return new PageImpl<UserDTO>(usersForm);
+		return new SliceImpl<UserDTO>(usersDTO);
 	}
 
 	// Salva um UserForm
@@ -63,6 +64,8 @@ public class UserServices {
 		if (cpf == 0){
 			User user = new User().convertToUser(userForm);
 			this.saveUser(user);
+		} else {
+			throw new ResourceNotFoundException("CPF Já Cadastrado: " + userForm.getCpf());
 		}
 	}
 

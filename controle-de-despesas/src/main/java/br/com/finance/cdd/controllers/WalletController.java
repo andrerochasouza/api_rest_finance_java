@@ -1,10 +1,14 @@
 package br.com.finance.cdd.controllers;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,15 +44,24 @@ public class WalletController {
 	private AplicationServices serviceAplication;
 
 	// Retorna UserDTO (Informações do Usuário)
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getUserPageId(@PathVariable(name = "id") Long id) {
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<?> getUserPageId(@PathVariable(name = "id") Long id, 
+										   @RequestParam(value = "numpage", required = false) Integer numPage) {
+		
 		User user = serviceUser.findByIdUser(id);
-		if (user.getWallet() == null || user.getWallet().getDateDelete() != null) {
+		
+		if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 			UserDTO userDTO = new UserDTO(user);
 			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.ACCEPTED);
 		} else {
 			Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());
-			WalletDTO walletDTO = new WalletDTO(wallet);
+			Pageable page;
+			if (Objects.nonNull(numPage))
+				page = PageRequest.of(numPage - 1, 10);
+			else
+				page = PageRequest.of(0, 10);
+			List<AplicationDTO> appsDTO = serviceAplication.findAllAppDTO(wallet, page);
+			WalletDTO walletDTO = new WalletDTO(wallet, appsDTO);
 			return new ResponseEntity<WalletDTO>(walletDTO, HttpStatus.FOUND);
 		}
 	}
@@ -57,7 +70,7 @@ public class WalletController {
 	@PostMapping("/{id}/add/wallet")
 	public ResponseEntity<?> createWallet(@PathVariable(name = "id") Long id) {
 		Wallet wallet = serviceWallet.createWallet(serviceUser.findByIdUser(id));
-		WalletDTO walletDTO = new WalletDTO(wallet);
+		WalletDTO walletDTO = new WalletDTO(wallet, null);
 		return new ResponseEntity<WalletDTO>(walletDTO, HttpStatus.ACCEPTED);
 	}
 
@@ -65,7 +78,7 @@ public class WalletController {
 	@DeleteMapping("/{id}/delete/wallet")
 	public ResponseEntity<?> deleteWallet(@PathVariable(name = "id") Long id) {
 		serviceWallet.deleteWallet(serviceUser.findByIdUser(id));
-		return getUserPageId(id);
+		return getUserPageId(id, null);
 	}
 
 	// Adiciona uma aplicação pelo ID do User
