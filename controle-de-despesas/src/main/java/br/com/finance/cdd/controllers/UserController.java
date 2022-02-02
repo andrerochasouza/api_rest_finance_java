@@ -1,11 +1,13 @@
 package br.com.finance.cdd.controllers;
 
+import java.util.Objects;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,16 +32,16 @@ public class UserController {
 
 	// Retorna UserPage de UsersForm (Lista todos os Usuários não deletados)
 	@GetMapping
-	public ResponseEntity<Page<UserDTO>> indexPage(@RequestParam(name = "numpage", required = false) Integer numPage) {
+	public ResponseEntity<Slice<UserDTO>> indexPage(@RequestParam(name = "numpage", required = false) Integer numPage) {
 
 		Pageable page;
-		if (numPage != null)
+		if (Objects.nonNull(numPage))
 			page = PageRequest.of(numPage - 1, 5);
 		else
 			page = PageRequest.of(0, 5);
 
-		Page<UserDTO> usersDTO = serviceUser.findAllUserDTO(page);
-		return new ResponseEntity<Page<UserDTO>>(usersDTO, HttpStatus.ACCEPTED);
+		Slice<UserDTO> usersDTO = serviceUser.findAllUserDTO(page);
+		return new ResponseEntity<Slice<UserDTO>>(usersDTO, HttpStatus.ACCEPTED);
 	}
 
 	// Adiciona um novo User (Sem carteira)
