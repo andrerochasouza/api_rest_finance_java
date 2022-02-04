@@ -12,6 +12,8 @@ public class UserForm {
 	@NotBlank
 	private String cpf;
 
+	
+
 	public UserForm(String name, String cpf) {
 		this.name = name;
 		this.cpf = cpf;
@@ -24,5 +26,4 @@ public class UserForm {
 	public String getCpf() {
 		return cpf;
 	}
-
 }

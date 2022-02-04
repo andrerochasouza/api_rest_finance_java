@@ -33,7 +33,7 @@ import br.com.finance.cdd.service.UserServices;
 import br.com.finance.cdd.service.WalletServices;
 
 @RestController
-@RequestMapping("/userpage")
+@RequestMapping("/users/wallet")
 public class WalletController {
 
 	@Autowired
