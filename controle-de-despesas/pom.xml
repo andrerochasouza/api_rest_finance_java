@@ -61,7 +61,7 @@
 			<artifactId>java-jwt</artifactId>
 			<version>3.16.0</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>

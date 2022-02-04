@@ -22,10 +22,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.finance.cdd.data.DetailAdminData;
 import br.com.finance.cdd.model.Admin;
 
+
 public class JWTAutenticarFilter extends UsernamePasswordAuthenticationFilter{
 
 	// Precisa mudar para o arquivo de configurações (aplication.properties)
 	public static final int TOKEN_EXPIRACAO = 600_000;
+	
 	public static final String TOKEN_SENHA = "27d43afd-6755-4753-8d87-c0bd3b4fe2b3";
 	
 	private final AuthenticationManager authenticationManager;
