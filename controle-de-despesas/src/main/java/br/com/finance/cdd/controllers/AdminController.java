@@ -1,6 +1,5 @@
 package br.com.finance.cdd.controllers;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -28,10 +27,6 @@ public class AdminController {
 	@Autowired
 	private PasswordEncoder encoder;
 	
-	@GetMapping("list-admin")
-	public ResponseEntity<List<Admin>> listAllAdmin(){
-		return ResponseEntity.ok(adminRepository.findAll());
-	}
 	
 	@PostMapping("new-admin")
 	public ResponseEntity<Admin> save(@RequestBody @Valid Admin admin){
