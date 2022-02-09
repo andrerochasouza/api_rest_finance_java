@@ -64,9 +64,20 @@ public class UserServices {
 		if (cpf == 0){
 			User user = new User().convertToUser(userForm);
 			this.saveUser(user);
+			walletService.createWallet(user);
+			this.saveUser(user);
+			
 		} else {
-			throw new ResourceNotFoundException("CPF Já Cadastrado: " + userForm.getCpf());
-		}
+			User user = userRepository.findByCpf(userForm.getCpf())
+									.orElseThrow(() -> new ResourceNotFoundException("User Not Found By CPF: " + cpf));
+			if(Objects.isNull(user.getDateDelete())) {
+				throw new ResourceNotFoundException("CPF Já Cadastrado: " + userForm.getCpf());				
+			}
+			
+			user.setDateDelete(null);
+			user.getWallet().setDateDelete(null);
+			this.saveUser(user);
+		} 
 	}
 
 	// Update um UserForm (PATCH OR PUT) (Não altera um usuário deletado)

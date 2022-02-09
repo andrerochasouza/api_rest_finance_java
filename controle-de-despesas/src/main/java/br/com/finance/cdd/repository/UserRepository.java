@@ -14,6 +14,8 @@ import br.com.finance.cdd.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	public Optional<User> findByName(String name);
+	
+	public Optional<User> findByCpf(String cpf);
 
 	public List<User> findAllByDateDeleteIsNull(Pageable pageable);
 

@@ -66,21 +66,6 @@ public class WalletController {
 		}
 	}
 
-	// Criar Wallet
-	@PostMapping("/{id}/add/wallet")
-	public ResponseEntity<?> createWallet(@PathVariable(name = "id") Long id) {
-		Wallet wallet = serviceWallet.createWallet(serviceUser.findByIdUser(id));
-		WalletDTO walletDTO = new WalletDTO(wallet, null);
-		return new ResponseEntity<WalletDTO>(walletDTO, HttpStatus.ACCEPTED);
-	}
-
-	// Deletar Wallet
-	@DeleteMapping("/{id}/delete/wallet")
-	public ResponseEntity<?> deleteWallet(@PathVariable(name = "id") Long id) {
-		serviceWallet.deleteWallet(serviceUser.findByIdUser(id));
-		return getUserPageId(id, null);
-	}
-
 	// Adiciona uma aplicação pelo ID do User
 	@PostMapping("/{id}/add/app")
 	public ResponseEntity<AplicationDTO> createApp(@PathVariable(name = "id") Long idUser,
