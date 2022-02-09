@@ -66,5 +66,4 @@ public class UserController {
 		serviceUser.updateUserForm(id, userForm);
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.ACCEPTED);
 	}
-
 }
