@@ -24,7 +24,7 @@ import br.com.finance.cdd.form.UserForm;
 import br.com.finance.cdd.service.UserServices;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/users")
 public class UserController {
 
 	@Autowired
