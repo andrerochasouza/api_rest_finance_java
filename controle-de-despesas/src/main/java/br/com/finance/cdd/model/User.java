@@ -2,6 +2,7 @@ package br.com.finance.cdd.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ public class User {
 
 	@NotBlank
 	@Length(min = 14 , max = 14)
+	@Column(unique = true)
 	private String cpf;
 
 	private Date dateCreation = new Date();

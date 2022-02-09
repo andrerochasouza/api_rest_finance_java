@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,21 +21,29 @@ public class Admin {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotNull
+	private String name;
+	
+	@Email
+	@Column(unique = true)
+	@NotNull
+	private String email;
+	
 	@Column(unique = true)
 	private String login;
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String pass;
 
+	public Admin() {
+	}
 	
-	public Admin(Long id, String login, String pass) {
-		super();
-		this.id = id;
+	public Admin(String name, @Email String email, String login, String pass) {
+		this.name = name;
+		this.email = email;
 		this.login = login;
 		this.pass = pass;
 	}
-
-	public Admin() {}
 
 	public Long getId() {
 		return id;
@@ -41,6 +51,22 @@ public class Admin {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getLogin() {
@@ -61,7 +87,7 @@ public class Admin {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, login, pass);
+		return Objects.hash(email, id, login, name, pass);
 	}
 
 	@Override
@@ -73,7 +99,8 @@ public class Admin {
 		if (getClass() != obj.getClass())
 			return false;
 		Admin other = (Admin) obj;
-		return Objects.equals(id, other.id) && Objects.equals(login, other.login) && Objects.equals(pass, other.pass);
+		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(login, other.login)
+				&& Objects.equals(name, other.name) && Objects.equals(pass, other.pass);
 	}
 	
 	
