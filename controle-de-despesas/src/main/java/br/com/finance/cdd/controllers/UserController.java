@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.finance.cdd.dto.UserDTO;
+import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.form.UserForm;
+import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.service.UserServices;
 
 @RestController
@@ -32,7 +35,7 @@ public class UserController {
 
 	// Retorna UserPage de UsersForm (Lista todos os Usuários não deletados)
 	@GetMapping
-	public ResponseEntity<Slice<UserDTO>> indexPage(@RequestParam(name = "numpage", required = false) Integer numPage) {
+	public ResponseEntity<Slice<UserDTO>> allUser(@RequestParam(name = "numpage", required = false) Integer numPage) {
 
 		Pageable page;
 		if (Objects.nonNull(numPage))
@@ -42,6 +45,18 @@ public class UserController {
 
 		Slice<UserDTO> usersDTO = serviceUser.findAllUserDTO(page);
 		return new ResponseEntity<Slice<UserDTO>>(usersDTO, HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<UserDTO> oneUser(@PathVariable(name = "id") Long id) {
+		User user = serviceUser.findByIdUser(id);
+		
+		if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
+			UserDTO userDTO = new UserDTO(user);
+			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.ACCEPTED);
+		} else {
+			throw new ResourceNotFoundException("User Not Found By ID: " + id);
+		}
 	}
 
 	// Adiciona um novo User (Sem carteira)
