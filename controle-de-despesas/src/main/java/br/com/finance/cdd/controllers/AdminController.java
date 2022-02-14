@@ -30,20 +30,20 @@ public class AdminController {
 	
 	@PostMapping("new-admin")
 	public ResponseEntity<Admin> save(@RequestBody @Valid Admin admin){
-		admin.setPass(encoder.encode(admin.getPass()));
+		admin.setPassword(encoder.encode(admin.getPassword()));
 		return ResponseEntity.ok(adminRepository.save(admin));
 	}
 	
 	@GetMapping("valid-pass")
 	public ResponseEntity<Boolean> validPass(@RequestParam String login,
-											 @RequestParam String pass){
+											 @RequestParam String password){
 		Optional<Admin> optAdmin = adminRepository.findByLogin(login);
 		if(optAdmin.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
 		}
 		
 		Admin admin = optAdmin.get();
-		boolean valid = encoder.matches(pass, admin.getPass());
+		boolean valid = encoder.matches(password, admin.getPassword());
 		
 		HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
 		
