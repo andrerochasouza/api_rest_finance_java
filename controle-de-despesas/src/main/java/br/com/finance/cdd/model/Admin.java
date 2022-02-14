@@ -21,28 +21,29 @@ public class Admin {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
-	private String name;
-	
-	@Email
-	@Column(unique = true)
-	@NotNull
-	private String email;
-	
-	@Column(unique = true)
-	private String login;
-	
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private String pass;
+    @NotNull
+    private String name;
 
+    @Email
+    @Column(unique = true)
+    @NotNull
+    private String email;
+
+    @Column(unique = true)
+    private String login;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+    
 	public Admin() {
 	}
-	
-	public Admin(String name, @Email String email, String login, String pass) {
+
+	public Admin(@NotNull String name, @Email @NotNull String email, String login, String password) {
+		super();
 		this.name = name;
 		this.email = email;
 		this.login = login;
-		this.pass = pass;
+		this.password = password;
 	}
 
 	public Long getId() {
@@ -77,17 +78,17 @@ public class Admin {
 		this.login = login;
 	}
 
-	public String getPass() {
-		return pass;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPass(String pass) {
-		this.pass = pass;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, id, login, name, pass);
+		return Objects.hash(email, id, login, name, password);
 	}
 
 	@Override
@@ -100,8 +101,9 @@ public class Admin {
 			return false;
 		Admin other = (Admin) obj;
 		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(login, other.login)
-				&& Objects.equals(name, other.name) && Objects.equals(pass, other.pass);
+				&& Objects.equals(name, other.name) && Objects.equals(password, other.password);
 	}
+
 	
-	
+		
 }

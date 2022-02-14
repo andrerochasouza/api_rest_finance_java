@@ -29,7 +29,7 @@ public class DetailAdminData implements UserDetails{
 
 	@Override
 	public String getPassword() {
-		return admin.orElse(new Admin()).getPass();
+		return admin.orElse(new Admin()).getPassword();
 	}
 
 	@Override
