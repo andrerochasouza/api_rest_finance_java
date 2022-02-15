@@ -39,15 +39,4 @@ public class JWTConfig extends WebSecurityConfigurerAdapter{
 								.addFilter(new JWTValidarFilter(authenticationManager()))
 								.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
-	
-//	@Bean
-//	CorsConfigurationSource corsConfigurationSource() {
-//		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		
-//		CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-//		source.registerCorsConfiguration("/**", corsConfiguration);
-//		
-//		return source;
-//	}
-	
 }
