@@ -45,6 +45,16 @@ public class AdminController {
 		}
 
 	}
+
+	@GetMapping("is-valid-email")
+	public ResponseEntity<Boolean> isValidEmail(@RequestHeader(name = "email", required = true) String email){
+		Optional<Admin> optAdmin = adminRepository.findByEmail(email);
+		if(optAdmin.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(true);
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+		}
+	}
 }
 
 

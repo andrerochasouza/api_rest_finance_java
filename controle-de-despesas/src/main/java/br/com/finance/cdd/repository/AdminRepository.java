@@ -11,5 +11,6 @@ import br.com.finance.cdd.model.Admin;
 public interface AdminRepository extends JpaRepository<Admin, Long>{
 
 	public Optional<Admin> findByLogin(String login);
-	
+
+	public Optional<Admin> findByEmail(String email);
 }
