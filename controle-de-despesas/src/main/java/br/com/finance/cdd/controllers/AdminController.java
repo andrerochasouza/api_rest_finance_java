@@ -41,7 +41,7 @@ public class AdminController {
 		if(optAdmin.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(true);
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(false);
 		}
 
 	}
@@ -52,7 +52,7 @@ public class AdminController {
 		if(optAdmin.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(true);
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(false);
 		}
 	}
 }
