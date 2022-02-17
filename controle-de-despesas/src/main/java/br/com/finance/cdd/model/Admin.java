@@ -9,7 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -21,18 +24,20 @@ public class Admin {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-    @NotNull
+    @NotBlank
     private String name;
 
     @Email
     @Column(unique = true)
-    @NotNull
+    @NotBlank
     private String email;
 
     @Column(unique = true)
+    @NotBlank
     private String login;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Length(min = 4)
     private String password;
     
 	public Admin() {
