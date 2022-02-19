@@ -28,7 +28,7 @@ public class User {
 	private String name;
 
 	@NotBlank
-	@Length(min = 14 , max = 14)
+	@Length(min = 11 , max = 14)
 	@Column(unique = true)
 	private String cpf;
 
