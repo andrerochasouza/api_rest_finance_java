@@ -1,11 +1,11 @@
 package br.com.finance.cdd.controllers;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,16 +35,14 @@ public class UserController {
 
 	// Retorna UserPage de UsersForm (Lista todos os Usuários não deletados)
 	@GetMapping
-	public ResponseEntity<List<UserDTO>> allUser(@RequestParam(name = "numpage", required = false) Integer numPage) {
+	public ResponseEntity<Page<UserDTO>> allUser(
+			@RequestParam(name = "page", required = true) Integer pageNum,
+			@RequestParam(name = "limit", required = true) Integer limitNum) {
 
-		Pageable page;
-		if (Objects.nonNull(numPage))
-			page = PageRequest.of(numPage - 1, 5);
-		else
-			page = PageRequest.of(0, 5);
+		Pageable page = PageRequest.of(pageNum, limitNum);
 
-		List<UserDTO> usersDTO = serviceUser.findAllUserDTO(page);
-		return new ResponseEntity<List<UserDTO>>(usersDTO, HttpStatus.ACCEPTED);
+		Page<UserDTO> usersDTO = serviceUser.findAllUserDTO(page);
+		return new ResponseEntity<Page<UserDTO>>(usersDTO, HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/{id}")

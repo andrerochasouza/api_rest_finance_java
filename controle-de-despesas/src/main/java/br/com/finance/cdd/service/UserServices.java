@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -47,13 +49,13 @@ public class UserServices {
 	}
 
 	// Retorna Lista de UsersDTO sem users deletados
-	public List<UserDTO> findAllUserDTO(Pageable pageable) { // Verificar o List para Page
-		List<User> users = userRepository.findAllByDateDeleteIsNull(pageable);
+	public Page<UserDTO> findAllUserDTO(Pageable pageable) { // Verificar o List para Page
+		Page<User> users = userRepository.findAllByDateDeleteIsNull(pageable);
 		List<UserDTO> usersDTO = users.stream()
 				.map(x -> new UserDTO(x))
 				.collect(Collectors.toList());
-
-		return usersDTO;
+		
+		return new PageImpl<UserDTO>(usersDTO, pageable, users.getTotalElements());
 	}
 
 	// Salva um UserForm
