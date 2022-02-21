@@ -1,12 +1,12 @@
 package br.com.finance.cdd.controllers;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -43,32 +43,52 @@ public class WalletController {
 	@Autowired
 	private AplicationServices serviceAplication;
 
-	// Retorna UserDTO (Informações do Usuário)
+	// Retorna WalletDTO (Informações do Usuário)
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<?> getUserPageId(@PathVariable(name = "id") Long id, 
-										   @RequestParam(value = "numpage", required = false) Integer numPage) {
+	public ResponseEntity<?> getWalletPageDTO(
+			@PathVariable(name = "id") Integer id, 
+			@RequestParam(value = "page", required = true) Integer pageNum,
+			@RequestParam(value = "limit", required = true) Integer limitNum) {
 		
 		User user = serviceUser.findByIdUser(id);
 		
 		if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 			UserDTO userDTO = new UserDTO(user);
-			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.ACCEPTED);
+			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 		} else {
 			Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());
-			Pageable page;
-			if (Objects.nonNull(numPage))
-				page = PageRequest.of(numPage - 1, 10);
-			else
-				page = PageRequest.of(0, 10);
-			List<AplicationDTO> appsDTO = serviceAplication.findAllAppDTO(wallet, page);
+			Pageable page = PageRequest.of(pageNum, limitNum);
+
+			Page<AplicationDTO> appsDTO = serviceAplication.findAllAppDTO(wallet, page);
 			WalletDTO walletDTO = new WalletDTO(wallet, appsDTO);
-			return new ResponseEntity<WalletDTO>(walletDTO, HttpStatus.FOUND);
+			return new ResponseEntity<WalletDTO>(walletDTO, HttpStatus.OK);
 		}
 	}
+	
+	// Retorna AppsDTO (Informações do Usuário)
+		@GetMapping(path = "/apps/{id}")
+		public ResponseEntity<?> getAppsDTO(
+				@PathVariable(name = "id") Integer id, 
+				@RequestParam(value = "page", required = true) Integer pageNum,
+				@RequestParam(value = "limit", required = true) Integer limitNum) {
+			
+			User user = serviceUser.findByIdUser(id);
+			
+			if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
+				UserDTO userDTO = new UserDTO(user);
+				return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
+			} else {
+				Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());
+				Pageable page = PageRequest.of(pageNum, limitNum);
+
+				Page<AplicationDTO> appsDTO = serviceAplication.findAllAppDTO(wallet, page);
+				return new ResponseEntity<Page<AplicationDTO>>(appsDTO, HttpStatus.OK);
+			}
+		}
 
 	// Adiciona uma aplicação pelo ID do User
 	@PostMapping("/{id}/add/app")
-	public ResponseEntity<AplicationDTO> createApp(@PathVariable(name = "id") Long idUser,
+	public ResponseEntity<AplicationDTO> createApp(@PathVariable(name = "id") Integer idUser,
 			@Valid @RequestBody AplicationForm appForm) {
 		User user = serviceUser.findByIdUser(idUser);
 		Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());

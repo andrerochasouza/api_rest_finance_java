@@ -76,6 +76,7 @@ public class UserServices {
 			
 			user.setDateDelete(null);
 			user.getWallet().setDateDelete(null);
+			user.setName(userForm.getName());
 			this.saveUser(user);
 		} 
 	}

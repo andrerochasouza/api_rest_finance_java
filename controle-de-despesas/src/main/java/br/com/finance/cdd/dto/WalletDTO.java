@@ -1,6 +1,6 @@
 package br.com.finance.cdd.dto;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import br.com.finance.cdd.model.Wallet;
 
@@ -9,9 +9,9 @@ public class WalletDTO {
 	private Long idUser;
 	private Double walletValue;
 	private String nameUser;
-	private List<AplicationDTO> aplicationsDTO;
+	private Page<AplicationDTO> aplicationsDTO;
 
-	public WalletDTO(Wallet wallet, List<AplicationDTO> appsDTO) {
+	public WalletDTO(Wallet wallet, Page<AplicationDTO> appsDTO) {
 		this.idUser = wallet.getUser().getId();
 		this.walletValue = wallet.getValue();
 		this.nameUser = wallet.getUser().getName();
@@ -30,7 +30,7 @@ public class WalletDTO {
 		return nameUser;
 	}
 
-	public List<AplicationDTO> getAplicationsDTO() {
+	public Page<AplicationDTO> getAplicationsDTO() {
 		return aplicationsDTO;
 	}
 

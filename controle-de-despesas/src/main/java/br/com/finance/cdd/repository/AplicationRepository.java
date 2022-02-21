@@ -1,7 +1,6 @@
 package br.com.finance.cdd.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +15,5 @@ public interface AplicationRepository extends JpaRepository<Aplication, Long> {
                     "WHERE u.id_wallet_aplication = ?1" +
                     " && u.date_delete is null",
             nativeQuery = true)
-    List<Aplication> findByAplicationsPage(Long id_wallet_aplication, Pageable pageable);
+    Page<Aplication> findByAplicationsPage(Long id_wallet_aplication, Pageable pageable);
 }
