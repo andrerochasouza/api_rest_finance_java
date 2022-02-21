@@ -28,8 +28,8 @@ public class UserServices {
 	// Regras de negócio
 
 	// Retorna um User não deletado
-	public User findByIdUser(Long id) {
-		User user = userRepository.findById(id)
+	public User findByIdUser(Integer id) {
+		User user = userRepository.findById(id.longValue())
 				.orElseThrow(() -> new ResourceNotFoundException("User Not Found By ID: " + id));
 		if (Objects.isNull(user.getDateDelete())) {
 			return user;
@@ -81,7 +81,7 @@ public class UserServices {
 	}
 
 	// Update um UserForm (PATCH OR PUT) (Não altera um usuário deletado)
-	public void updateUserForm(Long id, UserForm userForm) {
+	public void updateUserForm(Integer id, UserForm userForm) {
 		User user = findByIdUser(id);
 		if (Objects.nonNull(userForm.getName())) {
 			user.setName(userForm.getName());
@@ -101,7 +101,7 @@ public class UserServices {
 	}
 
 	// Deleta um User
-	public void deleteUserById(Long id) {
+	public void deleteUserById(Integer id) {
 		User user = findByIdUser(id);
 		user.setDateDelete(new Date());
 		walletService.deleteWallet(user);
