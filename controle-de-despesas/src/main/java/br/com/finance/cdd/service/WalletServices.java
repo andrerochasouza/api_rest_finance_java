@@ -79,8 +79,8 @@ public class WalletServices {
 	}
 	
 	// Altera o aplication e valor da wallet
-	public void updateAppForm(Long idAapp, AplicationForm appForm) {
-		Aplication app = appService.findById(idAapp);
+	public void updateAppForm(Long idApp, AplicationForm appForm) {
+		Aplication app = appService.findById(idApp);
 		Wallet wallet = app.getWallet();
 		
 		if(Objects.nonNull(appForm.getName())) {

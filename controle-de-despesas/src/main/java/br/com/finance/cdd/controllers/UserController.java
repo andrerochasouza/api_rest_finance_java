@@ -46,8 +46,9 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<UserDTO> oneUser(@PathVariable(name = "id") Integer id) {
-		User user = serviceUser.findByIdUser(id);
+	public ResponseEntity<UserDTO> oneUser(@PathVariable(name = "id") String id) {
+		Long idUserLong = Long.parseLong(id);
+		User user = serviceUser.findByIdUser(idUserLong);
 		
 		if (Objects.nonNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 			UserDTO userDTO = new UserDTO(user);
@@ -66,17 +67,19 @@ public class UserController {
 
 	// Deleta um User
 	@DeleteMapping
-	public ResponseEntity<UserDTO> deleteUser(@RequestParam(name = "iduser", required = true) Integer id) {
-		UserDTO userDTO = new UserDTO(serviceUser.findByIdUser(id));
-		serviceUser.deleteUserById(id);
+	public ResponseEntity<UserDTO> deleteUser(@RequestParam(name = "iduser", required = true) String id) {
+		Long idUserLong = Long.parseLong(id);
+		UserDTO userDTO = new UserDTO(serviceUser.findByIdUser(idUserLong));
+		serviceUser.deleteUserById(idUserLong);
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 	}
 
 	// Alterar um User,
 	@RequestMapping(method = { RequestMethod.PUT, RequestMethod.PATCH })
-	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "iduser", required = true) Integer id,
+	public ResponseEntity<UserForm> updateUser(@RequestParam(name = "iduser", required = true) String id,
 			@RequestBody UserForm userForm) {
-		serviceUser.updateUserForm(id, userForm);
+		Long idUserLong = Long.parseLong(id);
+		serviceUser.updateUserForm(idUserLong, userForm);
 		return new ResponseEntity<UserForm>(userForm, HttpStatus.ACCEPTED);
 	}
 }

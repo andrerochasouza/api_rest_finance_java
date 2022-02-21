@@ -46,11 +46,12 @@ public class WalletController {
 	// Retorna WalletDTO (Informações do Usuário)
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<?> getWalletPageDTO(
-			@PathVariable(name = "id") Integer id, 
+			@PathVariable(name = "id") String id, 
 			@RequestParam(value = "page", required = true) Integer pageNum,
 			@RequestParam(value = "limit", required = true) Integer limitNum) {
 		
-		User user = serviceUser.findByIdUser(id);
+		Long idUserLong = Long.parseLong(id);
+		User user = serviceUser.findByIdUser(idUserLong);
 		
 		if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 			UserDTO userDTO = new UserDTO(user);
@@ -68,11 +69,12 @@ public class WalletController {
 	// Retorna AppsDTO (Informações do Usuário)
 		@GetMapping(path = "/apps/{id}")
 		public ResponseEntity<?> getAppsDTO(
-				@PathVariable(name = "id") Integer id, 
+				@PathVariable(name = "id") String id, 
 				@RequestParam(value = "page", required = true) Integer pageNum,
 				@RequestParam(value = "limit", required = true) Integer limitNum) {
 			
-			User user = serviceUser.findByIdUser(id);
+			Long idUserLong = Long.parseLong(id);
+			User user = serviceUser.findByIdUser(idUserLong);
 			
 			if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 				UserDTO userDTO = new UserDTO(user);
@@ -88,9 +90,10 @@ public class WalletController {
 
 	// Adiciona uma aplicação pelo ID do User
 	@PostMapping("/{id}/add/app")
-	public ResponseEntity<AplicationDTO> createApp(@PathVariable(name = "id") Integer idUser,
+	public ResponseEntity<AplicationDTO> createApp(@PathVariable(name = "id") String idUser,
 			@Valid @RequestBody AplicationForm appForm) {
-		User user = serviceUser.findByIdUser(idUser);
+		Long idUserLong = Long.parseLong(idUser);
+		User user = serviceUser.findByIdUser(idUserLong);
 		Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());
 		
 		Aplication app = new Aplication(appForm.getName(), appForm.getValue(), appForm.getTypeAplication(), new Date(),
@@ -103,19 +106,21 @@ public class WalletController {
 
 	// Deleta uma aplicação pelo Id do App
 	@DeleteMapping("/{id}/delete/app")
-	public ResponseEntity<AplicationDTO> deleteApp(@RequestParam(value = "idapp", required = true) Long idApp) {
-		serviceAplication.deleteApp(idApp);
-		Aplication app = serviceAplication.findById(idApp);
+	public ResponseEntity<AplicationDTO> deleteApp(@RequestParam(value = "idapp", required = true) String idApp) {
+		Long idAppLong = Long.parseLong(idApp);
+		serviceAplication.deleteApp(idAppLong);
+		Aplication app = serviceAplication.findById(idAppLong);
 		serviceWallet.deleteAppToWallet(app);
-		AplicationDTO appDTO = serviceAplication.findByIdDTO(idApp);
+		AplicationDTO appDTO = serviceAplication.findByIdDTO(idAppLong);
 		return new ResponseEntity<AplicationDTO>(appDTO, HttpStatus.OK);
 	}
 	
 	// Altera uma aplicação pelo Id do App
 	@RequestMapping(method = { RequestMethod.PUT, RequestMethod.PATCH }, path = "/{id}")
-	public ResponseEntity<AplicationForm> updateApp(@RequestParam(name = "idapp", required = true) Long idApp,
+	public ResponseEntity<AplicationForm> updateApp(@RequestParam(name = "idapp", required = true) String idApp,
 			@RequestBody AplicationForm appForm) {
-		serviceWallet.updateAppForm(idApp, appForm);
+		Long idAppLong = Long.parseLong(idApp);
+		serviceWallet.updateAppForm(idAppLong, appForm);
 		return new ResponseEntity<AplicationForm>(appForm, HttpStatus.ACCEPTED);
 	}
 

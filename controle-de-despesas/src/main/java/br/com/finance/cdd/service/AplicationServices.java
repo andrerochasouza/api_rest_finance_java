@@ -71,7 +71,7 @@ public class AplicationServices {
 
 	// Otimizaação de código
 	private Aplication findByIdApp(Long id) {
-		return appRepository.findById(id)
+		return appRepository.findById(id.longValue())
 				.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
 	}
 
