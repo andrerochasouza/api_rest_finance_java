@@ -1,12 +1,12 @@
 package br.com.finance.cdd.controllers;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -43,34 +43,57 @@ public class WalletController {
 	@Autowired
 	private AplicationServices serviceAplication;
 
-	// Retorna UserDTO (Informações do Usuário)
+	// Retorna WalletDTO (Informações do Usuário)
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<?> getUserPageId(@PathVariable(name = "id") Long id, 
-										   @RequestParam(value = "numpage", required = false) Integer numPage) {
+	public ResponseEntity<?> getWalletPageDTO(
+			@PathVariable(name = "id") String id, 
+			@RequestParam(value = "page", required = true) Integer pageNum,
+			@RequestParam(value = "limit", required = true) Integer limitNum) {
 		
-		User user = serviceUser.findByIdUser(id);
+		Long idUserLong = Long.parseLong(id);
+		User user = serviceUser.findByIdUser(idUserLong);
 		
 		if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 			UserDTO userDTO = new UserDTO(user);
-			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.ACCEPTED);
+			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 		} else {
 			Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());
-			Pageable page;
-			if (Objects.nonNull(numPage))
-				page = PageRequest.of(numPage - 1, 10);
-			else
-				page = PageRequest.of(0, 10);
-			List<AplicationDTO> appsDTO = serviceAplication.findAllAppDTO(wallet, page);
+			Pageable page = PageRequest.of(pageNum, limitNum);
+
+			Page<AplicationDTO> appsDTO = serviceAplication.findAllAppDTO(wallet, page);
 			WalletDTO walletDTO = new WalletDTO(wallet, appsDTO);
-			return new ResponseEntity<WalletDTO>(walletDTO, HttpStatus.FOUND);
+			return new ResponseEntity<WalletDTO>(walletDTO, HttpStatus.OK);
 		}
 	}
+	
+	// Retorna AppsDTO (Informações do Usuário)
+		@GetMapping(path = "/apps/{id}")
+		public ResponseEntity<?> getAppsDTO(
+				@PathVariable(name = "id") String id, 
+				@RequestParam(value = "page", required = true) Integer pageNum,
+				@RequestParam(value = "limit", required = true) Integer limitNum) {
+			
+			Long idUserLong = Long.parseLong(id);
+			User user = serviceUser.findByIdUser(idUserLong);
+			
+			if (Objects.isNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
+				UserDTO userDTO = new UserDTO(user);
+				return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
+			} else {
+				Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());
+				Pageable page = PageRequest.of(pageNum, limitNum);
+
+				Page<AplicationDTO> appsDTO = serviceAplication.findAllAppDTO(wallet, page);
+				return new ResponseEntity<Page<AplicationDTO>>(appsDTO, HttpStatus.OK);
+			}
+		}
 
 	// Adiciona uma aplicação pelo ID do User
 	@PostMapping("/{id}/add/app")
-	public ResponseEntity<AplicationDTO> createApp(@PathVariable(name = "id") Long idUser,
+	public ResponseEntity<AplicationDTO> createApp(@PathVariable(name = "id") String idUser,
 			@Valid @RequestBody AplicationForm appForm) {
-		User user = serviceUser.findByIdUser(idUser);
+		Long idUserLong = Long.parseLong(idUser);
+		User user = serviceUser.findByIdUser(idUserLong);
 		Wallet wallet = serviceWallet.findByidWallet(user.getWallet().getId());
 		
 		Aplication app = new Aplication(appForm.getName(), appForm.getValue(), appForm.getTypeAplication(), new Date(),
@@ -83,19 +106,21 @@ public class WalletController {
 
 	// Deleta uma aplicação pelo Id do App
 	@DeleteMapping("/{id}/delete/app")
-	public ResponseEntity<AplicationDTO> deleteApp(@RequestParam(value = "idapp", required = true) Long idApp) {
-		serviceAplication.deleteApp(idApp);
-		Aplication app = serviceAplication.findById(idApp);
+	public ResponseEntity<AplicationDTO> deleteApp(@RequestParam(value = "idapp", required = true) String idApp) {
+		Long idAppLong = Long.parseLong(idApp);
+		serviceAplication.deleteApp(idAppLong);
+		Aplication app = serviceAplication.findById(idAppLong);
 		serviceWallet.deleteAppToWallet(app);
-		AplicationDTO appDTO = serviceAplication.findByIdDTO(idApp);
+		AplicationDTO appDTO = serviceAplication.findByIdDTO(idAppLong);
 		return new ResponseEntity<AplicationDTO>(appDTO, HttpStatus.OK);
 	}
 	
 	// Altera uma aplicação pelo Id do App
 	@RequestMapping(method = { RequestMethod.PUT, RequestMethod.PATCH }, path = "/{id}")
-	public ResponseEntity<AplicationForm> updateApp(@RequestParam(name = "idapp", required = true) Long idApp,
+	public ResponseEntity<AplicationForm> updateApp(@RequestParam(name = "idapp", required = true) String idApp,
 			@RequestBody AplicationForm appForm) {
-		serviceWallet.updateAppForm(idApp, appForm);
+		Long idAppLong = Long.parseLong(idApp);
+		serviceWallet.updateAppForm(idAppLong, appForm);
 		return new ResponseEntity<AplicationForm>(appForm, HttpStatus.ACCEPTED);
 	}
 

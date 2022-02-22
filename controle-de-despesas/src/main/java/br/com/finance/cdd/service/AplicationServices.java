@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +29,12 @@ public class AplicationServices {
 	}
 	
 	// Retorna um Slice de aplication pelo id do wallet
-	public List<AplicationDTO> findAllAppDTO(Wallet wallet, Pageable pageable){
-		List<Aplication> apps = appRepository.findByAplicationsPage(wallet.getId(), pageable);
+	public Page<AplicationDTO> findAllAppDTO(Wallet wallet, Pageable pageable){
+		Page<Aplication> apps = appRepository.findByAplicationsPage(wallet.getId(), pageable);
 		List<AplicationDTO> appsDTO = apps.stream()
 											.map(x -> new AplicationDTO(x))
 											.collect(Collectors.toList());
-		return appsDTO;
+		return new PageImpl<AplicationDTO>(appsDTO, pageable, apps.getTotalElements());
 	}
 	
 	// Salva uma Aplciation
@@ -69,7 +71,7 @@ public class AplicationServices {
 
 	// Otimizaação de código
 	private Aplication findByIdApp(Long id) {
-		return appRepository.findById(id)
+		return appRepository.findById(id.longValue())
 				.orElseThrow(() -> new ResourceNotFoundException("Pay Not Found By ID: " + id));
 	}
 
