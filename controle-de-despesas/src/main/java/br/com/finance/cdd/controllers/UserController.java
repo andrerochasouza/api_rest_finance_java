@@ -35,8 +35,7 @@ public class UserController {
 
 	// Retorna UserPage de UsersForm (Lista todos os Usuários não deletados)
 	@GetMapping
-	public ResponseEntity<Page<UserDTO>> allUser(
-			@RequestParam(name = "page", required = true) Integer pageNum,
+	public ResponseEntity<Page<UserDTO>> allUser(@RequestParam(name = "page", required = true) Integer pageNum,
 			@RequestParam(name = "limit", required = true) Integer limitNum) {
 
 		Pageable page = PageRequest.of(pageNum, limitNum);
@@ -44,12 +43,12 @@ public class UserController {
 		Page<UserDTO> usersDTO = serviceUser.findAllUserDTO(page);
 		return new ResponseEntity<Page<UserDTO>>(usersDTO, HttpStatus.ACCEPTED);
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> oneUser(@PathVariable(name = "id") String id) {
 		Long idUserLong = Long.parseLong(id);
 		User user = serviceUser.findByIdUser(idUserLong);
-		
+
 		if (Objects.nonNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 			UserDTO userDTO = new UserDTO(user);
 			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.ACCEPTED);

@@ -91,23 +91,33 @@ public class WalletServices {
 			app.setDescricao(appForm.getDescricao());
 		}
 		
-		if(Objects.nonNull(appForm.getValue())) {
-			if(app.getValue() >= appForm.getValue()) {
-				wallet.setValue(wallet.getValue() - (app.getValue() - appForm.getValue()));
+		if(Objects.nonNull(appForm.getTypeAplication())) {
+			if(appForm.getTypeAplication().equals(AplicationEnum.RECEITA)) {
+				if(appForm.getTypeAplication() == app.getTypeAplication()) {
+					if(appForm.getValue() > app.getValue()) {
+						wallet.setValue(wallet.getValue() + (appForm.getValue() - app.getValue()));
+					} else if(appForm.getValue() < app.getValue()) {
+						wallet.setValue(wallet.getValue() - (app.getValue() - appForm.getValue()));
+					}
+				} else {
+					wallet.setValue(wallet.getValue() + (appForm.getValue() + app.getValue()));
+				}
 			} else {
-				wallet.setValue(wallet.getValue() + (appForm.getValue()) - app.getValue());
+				if(appForm.getTypeAplication() == app.getTypeAplication()) {
+					if(appForm.getValue() > app.getValue()) {
+						wallet.setValue(wallet.getValue() - (app.getValue() - appForm.getValue()));
+					} else if(appForm.getValue() < app.getValue()) {
+						wallet.setValue(wallet.getValue() + (app.getValue() - appForm.getValue()));
+					}
+				} else {
+					wallet.setValue(wallet.getValue() - (appForm.getValue() + app.getValue()));
+				}
 			}
+			app.setTypeAplication(appForm.getTypeAplication());
 			app.setValue(appForm.getValue());
 		}
 		
-		if(Objects.nonNull(appForm.getTypeAplication())) {
-			app.setTypeAplication(appForm.getTypeAplication());
-			if(app.getTypeAplication().equals(AplicationEnum.RECEITA)) {
-				wallet.setValue(wallet.getValue() + (2 * app.getValue()));
-			} else {
-				wallet.setValue(wallet.getValue() - (2 * app.getValue()));
-			}
-		}
+		
 		appService.updateApp(app);
 		walletRepository.save(wallet);
 	}
