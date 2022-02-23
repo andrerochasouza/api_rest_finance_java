@@ -1,5 +1,7 @@
 package br.com.finance.cdd.controllers;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.finance.cdd.model.Admin;
+import br.com.finance.cdd.repository.AdminRepository;
 import br.com.finance.cdd.service.AdminService;
 
 @RestController
@@ -22,6 +25,8 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private AdminRepository adminRep;
 	@Autowired
 	private PasswordEncoder encoder;
 	
@@ -34,8 +39,30 @@ public class AdminController {
 	}
 	
 	@GetMapping("name/{login}")
-	public ResponseEntity<Admin> getName(@PathVariable String login){
-		return ResponseEntity.ok(adminService.findByLogin(login));
+    public ResponseEntity<Admin> getName(@PathVariable String login){
+        return ResponseEntity.ok(adminService.findByLogin(login));
+    }
+	
+	@GetMapping("exists/login/{login}")
+	public ResponseEntity<Boolean> existsLogin(@PathVariable String login){
+		Optional<Admin> loginExists = adminRep.findByLogin(login);
+
+		if(loginExists.isEmpty()) {
+			return ResponseEntity.ok(false);
+		}
+		return ResponseEntity.ok(true);
+		
+	}
+	
+	@GetMapping("exists/email/{email}")
+	public ResponseEntity<Boolean> existsEmail(@PathVariable String email){
+		Optional<Admin> emailExists = adminRep.findByEmail(email);
+
+		if(emailExists.isEmpty()) {
+			return ResponseEntity.ok(false);
+		}
+		return ResponseEntity.ok(true);
+		
 	}
 }
 

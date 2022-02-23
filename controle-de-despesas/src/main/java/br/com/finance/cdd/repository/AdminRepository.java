@@ -13,6 +13,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long>{
 
 	public Optional<Admin> findByLogin(String login);
 	
+	public Optional<Admin> findByEmail(String email);
 	
 	@Query(value = "SELECT name FROM FINANCE_IO.ADMIN u WHERE u.login = ?1",
 	           nativeQuery = true)
