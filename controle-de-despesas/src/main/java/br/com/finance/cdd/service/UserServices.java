@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import br.com.finance.cdd.dto.UserDTO;
 import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.form.UserForm;
-import br.com.finance.cdd.form.UsersListStringForm;
+import br.com.finance.cdd.form.ListStringForm;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.repository.UserRepository;
 
@@ -111,8 +111,8 @@ public class UserServices {
 	}
 	
 	// Deleta todos que estão no array
-	public void deleteArrayUsersById(UsersListStringForm usersId) {
-		List<Long> longsId = usersId.getUsersId().stream().map(str -> Long.parseLong(str)).collect(Collectors.toList());
+	public void deleteArrayUsersById(ListStringForm usersId) {
+		List<Long> longsId = usersId.getListString().stream().map(str -> Long.parseLong(str)).collect(Collectors.toList());
 		longsId.stream().forEach(id -> deleteUserById(id));
 	}
 

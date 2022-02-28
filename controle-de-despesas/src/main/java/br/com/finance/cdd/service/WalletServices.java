@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.form.AplicationForm;
+import br.com.finance.cdd.form.ListStringForm;
 import br.com.finance.cdd.model.Aplication;
 import br.com.finance.cdd.model.AplicationEnum;
 import br.com.finance.cdd.model.User;
@@ -78,6 +79,8 @@ public class WalletServices {
 		}
 	}
 	
+	
+	
 	// Altera o aplication e valor da wallet
 	public void updateAppForm(Long idApp, AplicationForm appForm) {
 		Aplication app = appService.findById(idApp);
@@ -129,16 +132,18 @@ public class WalletServices {
 	}
 	
 	
-	// Adiciona o valor da wallet
-	public void addAppToWallet(Aplication app) {
-		this.AppToWallet(app, true);
+	// Deleta o Aplicação no wallet
+	public void deleteAppToWalletTerminal(Long idApp) {
+		Aplication app = appService.findById(idApp);
+		this.deleteAppToWallet(app);
 	}
 	
 	// Deleta o valor da wallet
-	public void deleteAppToWallet(Aplication app) {
-		this.AppToWallet(app, false);
+	public void deleteAppsByIds(ListStringForm listAppsId) {
+		List<Long> appsLongId = listAppsId.getListString().stream().map(id -> Long.parseLong(id)).collect(Collectors.toList());
+		appsLongId.stream().forEach(id -> appService.deleteApp(id));
+		appsLongId.stream().map(id -> appService.findById(id)).forEach(id -> deleteAppToWallet(id));
 	}
-	
 	
 	
 	// Otimização de código
@@ -175,6 +180,16 @@ public class WalletServices {
 				throw new ResourceNotFoundException("Aplication Not Found");
 			}
 		}
+	}
+	
+	// Adiciona o valor da wallet
+	public void addAppToWallet(Aplication app) {
+		this.AppToWallet(app, true);
+	}
+	
+	// Deleta o valor da wallet
+	public void deleteAppToWallet(Aplication app) {
+		this.AppToWallet(app, false);
 	}
 	
 }
