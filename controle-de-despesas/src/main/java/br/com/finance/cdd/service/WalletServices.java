@@ -93,6 +93,9 @@ public class WalletServices {
 		
 		if(Objects.nonNull(appForm.getTypeAplication())) {
 			if(appForm.getTypeAplication().equals(AplicationEnum.RECEITA)) {
+				
+				// appForm for igual a Aplication.RECEITA
+				
 				if(appForm.getTypeAplication() == app.getTypeAplication()) {
 					if(appForm.getValue() > app.getValue()) {
 						wallet.setValue(wallet.getValue() + (appForm.getValue() - app.getValue()));
@@ -102,10 +105,13 @@ public class WalletServices {
 				} else {
 					wallet.setValue(wallet.getValue() + (appForm.getValue() + app.getValue()));
 				}
+				
+				// appForm for igual a Aplication.DESPESA
+				
 			} else {
 				if(appForm.getTypeAplication() == app.getTypeAplication()) {
 					if(appForm.getValue() > app.getValue()) {
-						wallet.setValue(wallet.getValue() - (app.getValue() - appForm.getValue()));
+						wallet.setValue(wallet.getValue() - (appForm.getValue() - app.getValue()));
 					} else if(appForm.getValue() < app.getValue()) {
 						wallet.setValue(wallet.getValue() + (app.getValue() - appForm.getValue()));
 					}
