@@ -25,6 +25,7 @@ import br.com.finance.cdd.dto.AplicationDTO;
 import br.com.finance.cdd.dto.UserDTO;
 import br.com.finance.cdd.dto.WalletDTO;
 import br.com.finance.cdd.form.AplicationForm;
+import br.com.finance.cdd.form.ListStringForm;
 import br.com.finance.cdd.model.Aplication;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.model.Wallet;
@@ -116,11 +117,16 @@ public class WalletController {
 	@DeleteMapping("/{idUser}/delete/app")
 	public ResponseEntity<AplicationDTO> deleteApp(@RequestParam(value = "idapp", required = true) String idApp) {
 		Long idAppLong = Long.parseLong(idApp);
-		serviceAplication.deleteApp(idAppLong);
-		Aplication app = serviceAplication.findById(idAppLong);
-		serviceWallet.deleteAppToWallet(app);
+		serviceWallet.deleteAppToWalletTerminal(idAppLong);
 		AplicationDTO appDTO = serviceAplication.findByIdDTO(idAppLong);
 		return new ResponseEntity<AplicationDTO>(appDTO, HttpStatus.OK);
+	}
+
+	// Deleta varias aplicações pelos Ids do App
+	@DeleteMapping("/{idUser}/delete/apps")
+	public ResponseEntity<Boolean> deleteApps(@RequestBody @Valid ListStringForm listIdApp) {
+		serviceWallet.deleteAppsByIds(listIdApp);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 
 	// Altera uma aplicação pelo Id do App

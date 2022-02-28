@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.finance.cdd.dto.UserDTO;
 import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.form.UserForm;
-import br.com.finance.cdd.form.UsersListStringForm;
+import br.com.finance.cdd.form.ListStringForm;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.service.UserServices;
 
@@ -76,7 +76,7 @@ public class UserController {
 	
 	// Deleta arrays de User
 	@DeleteMapping(path = {"/deleteusers"})
-	public ResponseEntity<Boolean> deleteUsers(@RequestBody @Valid UsersListStringForm usersId) {
+	public ResponseEntity<Boolean> deleteUsers(@RequestBody @Valid ListStringForm usersId) {
 		serviceUser.deleteArrayUsersById(usersId);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
