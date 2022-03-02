@@ -135,6 +135,7 @@ public class WalletServices {
 	// Deleta o Aplicação no wallet
 	public void deleteAppToWalletTerminal(Long idApp) {
 		Aplication app = appService.findById(idApp);
+		appService.deleteApp(idApp);
 		this.deleteAppToWallet(app);
 	}
 	
