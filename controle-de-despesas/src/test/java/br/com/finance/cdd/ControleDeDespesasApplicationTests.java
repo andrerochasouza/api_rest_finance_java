@@ -9,5 +9,4 @@ class ControleDeDespesasApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

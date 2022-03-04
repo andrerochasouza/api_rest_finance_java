@@ -108,7 +108,7 @@ public class WalletController {
 		Aplication app = new Aplication(appForm.getName(), appForm.getValue(), appForm.getTypeAplication(), new Date(),
 				wallet, null, appForm.getDescricao());
 		serviceAplication.addApp(app);
-		serviceWallet.addAppToWallet(app);
+		serviceWallet.addAppToWalletValue(app);
 		AplicationDTO appDTO = new AplicationDTO(app);
 		return new ResponseEntity<AplicationDTO>(appDTO, HttpStatus.CREATED);
 	}
