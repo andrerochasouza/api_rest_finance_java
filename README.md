@@ -1,15 +1,11 @@
 # finance.io API
 
-O [Finance.io](https://github.com/andrerochasouza/Finance.io-SPA) conta com um REST API para controle de dados entre um usuário, carteira do usuário, e as aplicações da carteira.
+O [Finance.io](https://github.com/andrerochasouza/Finance.io-API) conta com um REST API para controle de dados entre um usuário, carteira do usuário, e as aplicações da carteira.
 
 Recursos disponíveis para acesso via API:
-* [**Contatos**](#reference/recursos/contatos)
-* [**Produtos**](#reference/recursos/produtos)
-* [**Serviços**](#reference/recursos/servicos)
-* [**Recebimentos**](#reference/recursos/recebimentos)
-* [**Pagamentos**](#reference/recursos/pagamentos)
-* [**Vendas**](#reference/recursos/vendas)
-* [**Usuários**](#reference/recursos/usuarios)
+* [**Banco de dados**](#reference/recursos/produtos)
+* [**Admin**](#reference/recursos/admin)
+
 
 ## Métodos
 Requisições para a API devem seguir os padrões:
@@ -49,13 +45,13 @@ Nossa API utiliza [OAuth0](https://auth0.com/pt) como forma de autenticação/au
 
 # Group Recursos
 
-# Banco de dados [MySQL]
+### Banco de dados [MySQL]
 
-Necessário tem instalado e configurado o MySQL 8.0, assim após a criação, criar um Schema com o nome *[finance_io]*.
+Necessário tem instalado e configurado o MySQL 8.0, assim após a criação, criar um Schema com o nome *finance_io*.
 
 Após, iniciar API REST eu seu computador e verificar se foi criado todas as tabelas do *Finance_io*.
 
-# Admin [/new-admin]
+### Admin [/new-admin]
 
 Para acesso ao API, é necessário fazer uma requisição [POST] e se cadastrar utilizando o endpoint [/new-admin].
 
@@ -77,4 +73,4 @@ Para acesso ao API, é necessário fazer uma requisição [POST] e se cadastrar 
           "login": "[Seu login]"
       }
 
-[Read-Me em construção, obrigado]
+*Read-Me em construção, obrigado*
