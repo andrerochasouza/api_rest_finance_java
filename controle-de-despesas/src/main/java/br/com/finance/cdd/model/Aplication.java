@@ -17,6 +17,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import br.com.finance.cdd.error.ResourceNotFoundException;
+import br.com.finance.cdd.form.AplicationForm;
+
 @Entity
 @Table(name = "aplications")
 public class Aplication {
@@ -139,6 +142,44 @@ public class Aplication {
 			return false;
 		Aplication other = (Aplication) obj;
 		return id == other.id;
+	}
+
+	
+	// Diferença entre valores
+	public double diffValueAppFormReceita(AplicationForm appForm) {
+		double diffValue = 0.0;
+		switch (this.typeAplication) {
+		case RECEITA:
+			if (this.value > appForm.getValue()) {
+				diffValue = appForm.getValue() - this.value;
+			} else {
+				diffValue = appForm.getValue() - this.value;
+			}
+			return diffValue;
+		case DESPESA:
+			diffValue = this.value + appForm.getValue();
+			return diffValue;
+		default:
+			throw new ResourceNotFoundException("Type Aplication to App Not Found");
+		}
+	}
+
+	public double diffValueAppFormDespesa(AplicationForm appForm) {
+		double diffValue = 0.0;
+		switch (this.typeAplication) {
+		case RECEITA:
+			diffValue = this.value + appForm.getValue();
+			return (diffValue*(-1));
+		case DESPESA:
+			if(this.value < appForm.getValue()) {
+				diffValue = this.value - appForm.getValue();
+			} else {
+				diffValue = this.value - appForm.getValue();
+			}
+			return diffValue;
+		default:
+			throw new ResourceNotFoundException("Type Aplication to App Not Found");
+		}
 	}
 
 }

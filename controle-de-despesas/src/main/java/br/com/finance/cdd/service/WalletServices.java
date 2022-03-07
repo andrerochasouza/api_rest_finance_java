@@ -12,7 +12,6 @@ import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.form.AplicationForm;
 import br.com.finance.cdd.form.ListStringForm;
 import br.com.finance.cdd.model.Aplication;
-import br.com.finance.cdd.model.AplicationEnum;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.model.Wallet;
 import br.com.finance.cdd.repository.WalletRepository;
@@ -29,7 +28,6 @@ public class WalletServices {
 	public Wallet findByidWallet(Long idWallet) {
 		Wallet wallet = walletRepository.findById(idWallet)
 				.orElseThrow(() -> new ResourceNotFoundException("Wallet Not Found By ID: " + idWallet));
-		
 
 		if (Objects.isNull(wallet.getDateDelete())) {
 			List<Aplication> aplicationsOffDelete = wallet.getAplications().stream()
@@ -40,7 +38,6 @@ public class WalletServices {
 			throw new ResourceNotFoundException("Wallet Not Found");
 		}
 	}
-	
 
 	// Cria um Wallet (Ou retorna o dateDelete para null)
 	public Wallet createWallet(User user) {
@@ -61,7 +58,12 @@ public class WalletServices {
 		}
 	}
 
-	// Deleta um Wallet (Também deleta as APP)
+	// Adiciona o valor da aplicação no wallet
+	public void addAppToWalletValue(Aplication app) {
+		this.appToWalletValue(app, true);
+	}
+
+	// Deleta um Wallet (Também deleta as apps)
 	public void deleteWallet(User user) {
 		if (Objects.isNull(user.getWallet())) {
 			return;
@@ -75,95 +77,71 @@ public class WalletServices {
 			user.getWallet().setValue(0.0);
 			user.getWallet().setDateDelete(new Date());
 			walletRepository.save(user.getWallet());
-
 		}
 	}
-	
-	
-	
-	// Altera o aplication e valor da wallet
+
+	// Altera Aplicação e atualiza os valores da wallet
 	public void updateAppForm(Long idApp, AplicationForm appForm) {
 		Aplication app = appService.findById(idApp);
 		Wallet wallet = app.getWallet();
-		
-		if(Objects.nonNull(appForm.getName())) {
-			app.setName(appForm.getName());
+
+		app.setName(appForm.getName());
+		app.setDescricao(appForm.getDescricao());
+
+		switch (appForm.getTypeAplication()) {
+		case RECEITA:
+			wallet.setValue(wallet.getValue() + app.diffValueAppFormReceita(appForm));
+			break;
+		case DESPESA:
+			wallet.setValue(wallet.getValue() + app.diffValueAppFormDespesa(appForm));
+			break;
 		}
-		
-		if(Objects.nonNull(appForm.getDescricao())) {
-			app.setDescricao(appForm.getDescricao());
-		}
-		
-		if(Objects.nonNull(appForm.getTypeAplication())) {
-			if(appForm.getTypeAplication().equals(AplicationEnum.RECEITA)) {
-				
-				// appForm for igual a Aplication.RECEITA
-				
-				if(appForm.getTypeAplication() == app.getTypeAplication()) {
-					if(appForm.getValue() > app.getValue()) {
-						wallet.setValue(wallet.getValue() + (appForm.getValue() - app.getValue()));
-					} else if(appForm.getValue() < app.getValue()) {
-						wallet.setValue(wallet.getValue() - (app.getValue() - appForm.getValue()));
-					}
-				} else {
-					wallet.setValue(wallet.getValue() + (appForm.getValue() + app.getValue()));
-				}
-				
-				// appForm for igual a Aplication.DESPESA
-				
-			} else {
-				if(appForm.getTypeAplication() == app.getTypeAplication()) {
-					if(appForm.getValue() > app.getValue()) {
-						wallet.setValue(wallet.getValue() - (appForm.getValue() - app.getValue()));
-					} else if(appForm.getValue() < app.getValue()) {
-						wallet.setValue(wallet.getValue() + (app.getValue() - appForm.getValue()));
-					}
-				} else {
-					wallet.setValue(wallet.getValue() - (appForm.getValue() + app.getValue()));
-				}
-			}
-			app.setTypeAplication(appForm.getTypeAplication());
-			app.setValue(appForm.getValue());
-		}
-		
-		
+
+		app.setTypeAplication(appForm.getTypeAplication());
+		app.setValue(appForm.getValue());
 		appService.updateApp(app);
 		walletRepository.save(wallet);
 	}
-	
-	
-	// Deleta o Aplicação no wallet
+
+	// Deleta a Aplicação na wallet
 	public void deleteAppToWalletTerminal(Long idApp) {
 		Aplication app = appService.findById(idApp);
 		appService.deleteApp(idApp);
-		this.deleteAppToWallet(app);
+		this.deleteAppToWalletValue(app);
 	}
-	
-	// Deleta o valor da wallet
+
+	// Deleta varias aplicações na wallet
 	public void deleteAppsByIds(ListStringForm listAppsId) {
-		List<Long> appsLongId = listAppsId.getListString().stream().map(id -> Long.parseLong(id)).collect(Collectors.toList());
+		List<Long> appsLongId = listAppsId.getListString().stream().map(id -> Long.parseLong(id))
+				.collect(Collectors.toList());
 		appsLongId.stream().forEach(id -> appService.deleteApp(id));
-		appsLongId.stream().map(id -> appService.findById(id)).forEach(id -> deleteAppToWallet(id));
+		appsLongId.stream().map(id -> appService.findById(id)).forEach(id -> deleteAppToWalletValue(id));
 	}
-	
-	
+
+	// Deleta o valor da aplicação no wallet
+	public void deleteAppToWalletValue(Aplication app) {
+		this.appToWalletValue(app, false);
+	}
+
 	// Otimização de código
-	private void AppToWallet(Aplication app, boolean typeApp) {
-		
+
+	// Atualiza o valor do Wallet (Se a aplicação está sendo deletado ou adicionada)
+	private void appToWalletValue(Aplication app, boolean typeApp) {
+
 		Wallet wallet = app.getWallet();
-		
-		if(typeApp) {
+
+		if (typeApp) {
 			switch (app.getTypeAplication()) {
 			case RECEITA:
 				wallet.setValue(wallet.getValue() + app.getValue());
 				walletRepository.save(wallet);
 				break;
-	
+
 			case DESPESA:
 				wallet.setValue(wallet.getValue() - app.getValue());
 				walletRepository.save(wallet);
 				break;
-			default: 
+			default:
 				throw new ResourceNotFoundException("Aplication Not Found");
 			}
 		} else {
@@ -172,25 +150,14 @@ public class WalletServices {
 				wallet.setValue(wallet.getValue() - app.getValue());
 				walletRepository.save(wallet);
 				break;
-				
+
 			case DESPESA:
 				wallet.setValue(wallet.getValue() + app.getValue());
 				walletRepository.save(wallet);
 				break;
-			default: 
+			default:
 				throw new ResourceNotFoundException("Aplication Not Found");
 			}
 		}
 	}
-	
-	// Adiciona o valor da wallet
-	public void addAppToWallet(Aplication app) {
-		this.AppToWallet(app, true);
-	}
-	
-	// Deleta o valor da wallet
-	public void deleteAppToWallet(Aplication app) {
-		this.AppToWallet(app, false);
-	}
-	
 }
