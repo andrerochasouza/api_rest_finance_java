@@ -3,8 +3,9 @@
 O [Finance.io](https://github.com/andrerochasouza/Finance.io-API) conta com um REST API para controle de dados entre um usuário, carteira do usuário, e as aplicações da carteira.
 
 Recursos disponíveis para acesso via API:
-* [**Banco de dados**](#reference/recursos/produtos)
+* [**Banco de dados**](#reference/recursos/bd)
 * [**Admin**](#reference/recursos/admin)
+* [**Em construção...**](#reference/recursos/construct)
 
 
 ## Métodos
