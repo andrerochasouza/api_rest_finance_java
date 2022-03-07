@@ -135,7 +135,7 @@ public class WalletController {
 			@RequestBody AplicationForm appForm) {
 		Long idAppLong = Long.parseLong(idApp);
 		serviceWallet.updateAppForm(idAppLong, appForm);
-		return new ResponseEntity<AplicationForm>(appForm, HttpStatus.ACCEPTED);
+		return new ResponseEntity<AplicationForm>(appForm, HttpStatus.OK);
 	}
 
 }

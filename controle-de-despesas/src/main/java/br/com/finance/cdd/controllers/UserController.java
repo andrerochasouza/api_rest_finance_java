@@ -42,7 +42,7 @@ public class UserController {
 		Pageable page = PageRequest.of(pageNum, limitNum);
 
 		Page<UserDTO> usersDTO = serviceUser.findAllUserDTO(page);
-		return new ResponseEntity<Page<UserDTO>>(usersDTO, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Page<UserDTO>>(usersDTO, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
@@ -52,7 +52,7 @@ public class UserController {
 
 		if (Objects.nonNull(user.getWallet()) || Objects.nonNull(user.getWallet().getDateDelete())) {
 			UserDTO userDTO = new UserDTO(user);
-			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.ACCEPTED);
+			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 		} else {
 			throw new ResourceNotFoundException("User Not Found By ID: " + id);
 		}
@@ -87,6 +87,6 @@ public class UserController {
 			@RequestBody UserForm userForm) {
 		Long idUserLong = Long.parseLong(id);
 		serviceUser.updateUserForm(idUserLong, userForm);
-		return new ResponseEntity<UserForm>(userForm, HttpStatus.ACCEPTED);
+		return new ResponseEntity<UserForm>(userForm, HttpStatus.OK);
 	}
 }

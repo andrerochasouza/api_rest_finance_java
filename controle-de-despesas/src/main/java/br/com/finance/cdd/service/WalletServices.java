@@ -85,20 +85,20 @@ public class WalletServices {
 		Aplication app = appService.findById(idApp);
 		Wallet wallet = app.getWallet();
 
-		app.setTypeAplication(appForm.getTypeAplication());
-		app.setValue(appForm.getValue());
 		app.setName(appForm.getName());
 		app.setDescricao(appForm.getDescricao());
 
 		switch (appForm.getTypeAplication()) {
 		case RECEITA:
-			wallet.setValue(wallet.getValue() + this.appReceitaUpdate(appForm, app));
+			wallet.setValue(wallet.getValue() + app.diffValueAppFormReceita(appForm));
 			break;
 		case DESPESA:
-			wallet.setValue(wallet.getValue() - this.appDespesaUpdate(appForm, app));
+			wallet.setValue(wallet.getValue() + app.diffValueAppFormDespesa(appForm));
 			break;
 		}
 
+		app.setTypeAplication(appForm.getTypeAplication());
+		app.setValue(appForm.getValue());
 		appService.updateApp(app);
 		walletRepository.save(wallet);
 	}
@@ -124,30 +124,6 @@ public class WalletServices {
 	}
 
 	// Otimização de código
-
-	// Atualizar App com os valores do AppForm
-	public double appReceitaUpdate(AplicationForm appForm, Aplication app) {
-		switch (app.getTypeAplication()) {
-		case RECEITA:
-			return 0.0;
-		case DESPESA:
-			return 0.0;
-		default:
-			return 0.0;
-		}
-	}
-
-	// Atualizar App com os valores do AppForm
-	public double appDespesaUpdate(AplicationForm appForm, Aplication app) {
-		switch (app.getTypeAplication()) {
-		case RECEITA:
-			return 0.0;
-		case DESPESA:
-			return 0.0;
-		default:
-			return 0.0;
-		}
-	}
 
 	// Atualiza o valor do Wallet (Se a aplicação está sendo deletado ou adicionada)
 	private void appToWalletValue(Aplication app, boolean typeApp) {
