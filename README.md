@@ -1,4 +1,4 @@
-# finance.io API
+# Finance.io API REST
 
 O [Finance.io](https://github.com/andrerochasouza/Finance.io-API) conta com um REST API para controle de dados entre um usuário, carteira do usuário, e as aplicações da carteira.
 
