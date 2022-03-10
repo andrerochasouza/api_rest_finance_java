@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -35,6 +37,10 @@ public class User {
 	private Date dateCreation = new Date();
 
 	private Date dateDelete = null;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_admin_user")
+	private Admin admin;
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
 	private Wallet wallet;
@@ -42,79 +48,74 @@ public class User {
 	public User() {
 	}
 
-	
-	public User(@NotBlank String name, @NotBlank @Length(min = 14, max = 14) String cpf, Date dateCreation,
-			Date dateDelete, Wallet wallet) {
+	public User(@NotBlank String name, @NotBlank @Length(min = 11, max = 14) String cpf, Date dateCreation,
+			Date dateDelete, Admin admin, Wallet wallet) {
 		super();
 		this.name = name;
 		this.cpf = cpf;
 		this.dateCreation = dateCreation;
 		this.dateDelete = dateDelete;
+		this.admin = admin;
 		this.wallet = wallet;
 	}
-
 
 	public long getId() {
 		return id;
 	}
 
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public String getCpf() {
 		return cpf;
 	}
 
-
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-
 
 	public Date getDateCreation() {
 		return dateCreation;
 	}
 
-
 	public void setDateCreation(Date dateCreation) {
 		this.dateCreation = dateCreation;
 	}
-
 
 	public Date getDateDelete() {
 		return dateDelete;
 	}
 
-
 	public void setDateDelete(Date dateDelete) {
 		this.dateDelete = dateDelete;
 	}
 
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
 
 	public Wallet getWallet() {
 		return wallet;
 	}
 
-
 	public void setWallet(Wallet wallet) {
 		this.wallet = wallet;
 	}
 
-
-	public User convertToUser(UserForm userForm) {
-		return new User(userForm.getName(), userForm.getCpf(), getDateCreation(), getDateDelete(), null);
+	public User convertToUser(UserForm userForm, Admin adminForm) {
+		return new User(userForm.getName(), userForm.getCpf(), getDateCreation(), getDateDelete(), adminForm, null);
 	}
 }

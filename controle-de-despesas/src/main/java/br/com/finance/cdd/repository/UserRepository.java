@@ -17,7 +17,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	public Optional<User> findByCpf(String cpf);
 
-	public Page<User> findAllByDateDeleteIsNull(Pageable pageable);
+	@Query(value = "SELECT * FROM FINANCE_IO.USERS u " +
+            "WHERE u.id_admin_user = ?1" +
+            " && u.date_delete is null",
+    nativeQuery = true)
+	Page<User> findByUsersPage(Long id_admin_user, Pageable pageable);
  
 	@Query(value = "SELECT count(cpf) FROM FINANCE_IO.USERS u WHERE u.cpf = ?1",
 		   nativeQuery = true)

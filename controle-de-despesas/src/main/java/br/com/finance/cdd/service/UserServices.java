@@ -16,11 +16,14 @@ import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.form.UserForm;
 import br.com.finance.cdd.form.ListStringForm;
 import br.com.finance.cdd.model.User;
+import br.com.finance.cdd.repository.AdminRepository;
 import br.com.finance.cdd.repository.UserRepository;
 
 @Service
 public class UserServices {
 
+	@Autowired
+	private AdminRepository adminRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -50,8 +53,8 @@ public class UserServices {
 	}
 
 	// Retorna Lista de UsersDTO sem users deletados
-	public Page<UserDTO> findAllUserDTO(Pageable pageable) { // Verificar o List para Page
-		Page<User> users = userRepository.findAllByDateDeleteIsNull(pageable);
+	public Page<UserDTO> findAllUserDTO(Pageable pageable, Long idAdmin) { // Verificar o List para Page
+		Page<User> users = userRepository.findByUsersPage(idAdmin, pageable);
 		List<UserDTO> usersDTO = users.stream()
 				.map(x -> new UserDTO(x))
 				.collect(Collectors.toList());
@@ -63,7 +66,7 @@ public class UserServices {
 	public void saveUserForm(UserForm userForm) {
 		Integer cpf = userRepository.findCountCpf(userForm.getCpf());
 		if (cpf == 0){
-			User user = new User().convertToUser(userForm);
+			User user = new User().convertToUser(userForm, adminRepository.getById(userForm.getIdAdmin()));
 			this.saveUser(user);
 			walletService.createWallet(user);
 			this.saveUser(user);

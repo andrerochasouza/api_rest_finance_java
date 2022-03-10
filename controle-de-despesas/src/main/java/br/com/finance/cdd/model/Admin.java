@@ -1,16 +1,18 @@
 package br.com.finance.cdd.model;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -40,15 +42,20 @@ public class Admin {
     @Length(min = 4)
     private String password;
     
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
+	private List<User> users;
+    
 	public Admin() {
 	}
 
-	public Admin(@NotNull String name, @Email @NotNull String email, String login, String password) {
+	public Admin(@NotBlank String name, @Email @NotBlank String email, @NotBlank String login,
+			@Length(min = 4) String password, List<User> users) {
 		super();
 		this.name = name;
 		this.email = email;
 		this.login = login;
 		this.password = password;
+		this.users = users;
 	}
 
 	public Long getId() {
@@ -91,9 +98,17 @@ public class Admin {
 		this.password = password;
 	}
 
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, id, login, name, password);
+		return Objects.hash(email, id, login, name, password, users);
 	}
 
 	@Override
@@ -106,9 +121,7 @@ public class Admin {
 			return false;
 		Admin other = (Admin) obj;
 		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(login, other.login)
-				&& Objects.equals(name, other.name) && Objects.equals(password, other.password);
+				&& Objects.equals(name, other.name) && Objects.equals(password, other.password)
+				&& Objects.equals(users, other.users);
 	}
-
-	
-		
 }
