@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.finance.cdd.dto.AdminDTO;
 import br.com.finance.cdd.model.Admin;
 import br.com.finance.cdd.repository.AdminRepository;
 import br.com.finance.cdd.service.AdminService;
@@ -39,7 +40,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("name/{login}")
-    public ResponseEntity<Admin> getName(@PathVariable String login){
+    public ResponseEntity<AdminDTO> getName(@PathVariable String login){
         return ResponseEntity.ok(adminService.findByLogin(login));
     }
 	
