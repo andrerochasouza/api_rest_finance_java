@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,12 +37,15 @@ public class UserController {
 
 	// Retorna UserPage de UsersForm (Lista todos os Usuários não deletados)
 	@GetMapping
-	public ResponseEntity<Page<UserDTO>> allUser(@RequestParam(name = "page", required = true) Integer pageNum,
+	public ResponseEntity<Page<UserDTO>> allUser(
+			@RequestHeader(name = "id", required = true) String idAdmin,
+			@RequestParam(name = "page", required = true) Integer pageNum,
 			@RequestParam(name = "limit", required = true) Integer limitNum) {
-
+		
+		Long idAdminLong = Long.parseLong(idAdmin);
 		Pageable page = PageRequest.of(pageNum, limitNum);
 
-		Page<UserDTO> usersDTO = serviceUser.findAllUserDTO(page);
+		Page<UserDTO> usersDTO = serviceUser.findAllUserDTO(page, idAdminLong);
 		return new ResponseEntity<Page<UserDTO>>(usersDTO, HttpStatus.OK);
 	}
 

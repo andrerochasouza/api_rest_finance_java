@@ -1,22 +1,24 @@
 package br.com.finance.cdd.form;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class UserForm {
 
 	@NotNull
-	@NotBlank
 	private String name;
+	
 	@NotNull
-	@NotBlank
 	private String cpf;
 
-	
+	@NotNull
+	private Long idAdmin;
 
-	public UserForm(String name, String cpf) {
+
+	public UserForm(@NotNull String name, @NotNull String cpf, @NotNull Long idAdmin) {
+		super();
 		this.name = name;
 		this.cpf = cpf;
+		this.idAdmin = idAdmin;
 	}
 
 	public String getName() {
@@ -25,5 +27,9 @@ public class UserForm {
 
 	public String getCpf() {
 		return cpf;
+	}
+
+	public Long getIdAdmin() {
+		return idAdmin;
 	}
 }

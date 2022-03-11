@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.finance.cdd.dto.AdminDTO;
 import br.com.finance.cdd.error.ResourceNotFoundException;
 import br.com.finance.cdd.model.Admin;
 import br.com.finance.cdd.repository.AdminRepository;
@@ -23,12 +24,12 @@ public class AdminService {
 	}
 	
 	// Achar o login e retorna Admin
-	public Admin findByLogin(String login) {
+	public AdminDTO findByLogin(String login) {
 		Optional<Admin> admin = adminRepository.findByLogin(login);
 		if (admin.isEmpty()) {
 			throw new ResourceNotFoundException("Admin Not Found By Login: " + login);
 		} else {
-			return admin.get();
+			return new AdminDTO(admin.get());
 		}
 	}
 }
