@@ -1,5 +1,7 @@
 package br.com.finance.cdd.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -60,6 +62,14 @@ public class UserController {
 		} else {
 			throw new ResourceNotFoundException("User Not Found By ID: " + id);
 		}
+	}
+	
+	@GetMapping("/maxvalue")
+	public ResponseEntity<ArrayList<Integer>> maxValueAppList(@RequestHeader(name = "id") String id) {
+		Long idAdminLong = Long.parseLong(id);
+		ArrayList<Integer> listUsersWalletValue = serviceUser.findByIdAdminMaxValueList(idAdminLong);
+
+		return new ResponseEntity<ArrayList<Integer>>(listUsersWalletValue, HttpStatus.OK);
 	}
 
 	// Adiciona um novo User (Sem carteira)

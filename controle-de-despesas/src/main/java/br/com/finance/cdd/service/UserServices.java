@@ -1,5 +1,6 @@
 package br.com.finance.cdd.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -13,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.finance.cdd.dto.UserDTO;
 import br.com.finance.cdd.error.ResourceNotFoundException;
-import br.com.finance.cdd.form.UserForm;
 import br.com.finance.cdd.form.ListStringForm;
+import br.com.finance.cdd.form.UserForm;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.repository.AdminRepository;
 import br.com.finance.cdd.repository.UserRepository;
@@ -60,6 +61,25 @@ public class UserServices {
 				.collect(Collectors.toList());
 		
 		return new PageImpl<UserDTO>(usersDTO, pageable, users.getTotalElements());
+	}
+	
+	public ArrayList<Integer> findByIdAdminMaxValueList(Long idAdmin){
+		List<User> users = userRepository.findAll();
+		int maxValueUserPositivo = users.stream()
+							.filter(user -> user.getDateDelete() == null)
+							.filter(user -> user.getWallet().getValue() >= 0)
+							.collect(Collectors.toList()).size();
+		
+		int maxValueUserNegativo = users.stream()
+				.filter(user -> user.getDateDelete() == null)
+				.filter(user -> user.getWallet().getValue() < 0)
+				.collect(Collectors.toList()).size();
+		
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(maxValueUserPositivo);
+		list.add(maxValueUserNegativo);
+		
+		return list;
 	}
 
 	// Salva um UserForm
