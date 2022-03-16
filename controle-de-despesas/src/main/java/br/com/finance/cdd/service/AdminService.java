@@ -25,11 +25,13 @@ public class AdminService {
 	
 	// Achar o login e retorna Admin
 	public AdminDTO findByLogin(String login) {
-		Optional<Admin> admin = adminRepository.findByLogin(login);
-		if (admin.isEmpty()) {
-			throw new ResourceNotFoundException("Admin Not Found By Login: " + login);
+		Optional<Admin> adminOpt = adminRepository.findByLogin(login);
+		
+		if(adminOpt.isPresent()) {
+			return new AdminDTO(adminOpt.get());
 		} else {
-			return new AdminDTO(admin.get());
+			throw new ResourceNotFoundException("Admin not found by login: " + login);		
 		}
+		
 	}
 }
