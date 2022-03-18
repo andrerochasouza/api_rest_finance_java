@@ -1,5 +1,6 @@
 package br.com.finance.cdd.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -26,4 +27,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value = "SELECT count(cpf) FROM FINANCE_IO.USERS u WHERE u.cpf = ?1",
 		   nativeQuery = true)
 	Integer findCountCpf(String cpf);
+	
+	@Query(value = "SELECT u.* FROM finance_io.users AS u, finance_io.aplications AS a\r\n"
+			+ "WHERE a.date_init > ?1 AND a.date_init < ?2",
+			   nativeQuery = true)
+	Optional<List<User>> findListUserDayHighestWallet(String dateInit, String dateAfter);
 }

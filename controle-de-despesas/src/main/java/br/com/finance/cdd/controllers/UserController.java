@@ -1,7 +1,6 @@
 package br.com.finance.cdd.controllers;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -25,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.finance.cdd.dto.UserDTO;
 import br.com.finance.cdd.error.ResourceNotFoundException;
-import br.com.finance.cdd.form.UserForm;
 import br.com.finance.cdd.form.ListStringForm;
+import br.com.finance.cdd.form.UserForm;
 import br.com.finance.cdd.model.User;
 import br.com.finance.cdd.service.UserServices;
 

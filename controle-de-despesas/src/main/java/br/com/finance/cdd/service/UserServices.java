@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,12 @@ public class UserServices {
 		} else {
 			throw new ResourceNotFoundException("User Not Found By Name: " + name);
 		}
+	}
+	
+	// Devolver uma lista com o usuário que mais vendeu no dia
+	public UserDTO findUserByHighestValueAppDay(String date){
+		Optional<List<User>> listUserOpt = userRepository.findListUserDayHighestWallet(null, null);
+		return null;
 	}
 
 	// Retorna Lista de UsersDTO sem users deletados
