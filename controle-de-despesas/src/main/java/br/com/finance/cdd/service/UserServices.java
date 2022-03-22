@@ -54,6 +54,16 @@ public class UserServices {
 		}
 	}
 	
+	public Integer getMaxUsers(Long idAdmin) {
+		Optional<Integer> maxUserCountOpt = userRepository.findMaxUsersCount(idAdmin);
+		
+		if(maxUserCountOpt.isPresent()) {
+			return maxUserCountOpt.get();			
+		}
+		
+		throw new ResourceNotFoundException("User Not Found");
+	}
+	
 	// Devolver uma lista com o usuário que mais vendeu no dia
 	public UserDTO findUserByHighestValueAppDay(String date){
 		Optional<List<User>> listUserOpt = userRepository.findListUserDayHighestWallet(null, null);
@@ -71,7 +81,14 @@ public class UserServices {
 	}
 	
 	public ArrayList<Integer> findByIdAdminMaxValueList(Long idAdmin){
-		List<User> users = userRepository.findAll();
+		Optional<List<User>> usersOpt = userRepository.findAllUsersByIdAdminIs(idAdmin);
+		
+		if(usersOpt.isEmpty()) {
+			throw new ResourceNotFoundException("Users Not Found");
+		}
+		
+		List<User> users = usersOpt.get();
+		
 		int maxValueUserPositivo = users.stream()
 							.filter(user -> user.getDateDelete() == null)
 							.filter(user -> user.getWallet().getValue() >= 0)

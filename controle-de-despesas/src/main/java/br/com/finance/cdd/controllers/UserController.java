@@ -70,6 +70,19 @@ public class UserController {
 
 		return new ResponseEntity<ArrayList<Integer>>(listUsersWalletValue, HttpStatus.OK);
 	}
+	
+	@GetMapping("/maxcountuser")
+	public ResponseEntity<Integer> maxCountUser(@RequestHeader(name = "id") String id) {
+		Long idAdminLong = Long.parseLong(id);
+		Integer maxCountUser = serviceUser.getMaxUsers(idAdminLong);
+		
+		if(maxCountUser >= 0) {
+			return new ResponseEntity<Integer>(maxCountUser, HttpStatus.OK);			
+		} else {
+			return new ResponseEntity<Integer>(0, HttpStatus.OK);			
+		}
+
+	}
 
 	// Adiciona um novo User (Sem carteira)
 	@PostMapping
