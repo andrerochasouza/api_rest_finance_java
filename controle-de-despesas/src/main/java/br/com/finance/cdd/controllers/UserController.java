@@ -1,6 +1,6 @@
 package br.com.finance.cdd.controllers;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -50,6 +50,7 @@ public class UserController {
 		return new ResponseEntity<Page<UserDTO>>(usersDTO, HttpStatus.OK);
 	}
 
+	// Devolve um usuário
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> oneUser(@PathVariable(name = "id") String id) {
 		Long idUserLong = Long.parseLong(id);
@@ -63,25 +64,13 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/maxvalue")
-	public ResponseEntity<ArrayList<Integer>> maxValueAppList(@RequestHeader(name = "id") String id) {
+	// Devolve a lista completa de usuários
+	@GetMapping("/listdto")
+	public ResponseEntity<List<UserDTO>> maxValueAppList(@RequestHeader(name = "id") String id) {
 		Long idAdminLong = Long.parseLong(id);
-		ArrayList<Integer> listUsersWalletValue = serviceUser.findByIdAdminMaxValueList(idAdminLong);
+		List<UserDTO> listUserDTO = serviceUser.getUsersAllByIdAdmin(idAdminLong);
 
-		return new ResponseEntity<ArrayList<Integer>>(listUsersWalletValue, HttpStatus.OK);
-	}
-	
-	@GetMapping("/maxcountuser")
-	public ResponseEntity<Integer> maxCountUser(@RequestHeader(name = "id") String id) {
-		Long idAdminLong = Long.parseLong(id);
-		Integer maxCountUser = serviceUser.getMaxUsers(idAdminLong);
-		
-		if(maxCountUser >= 0) {
-			return new ResponseEntity<Integer>(maxCountUser, HttpStatus.OK);			
-		} else {
-			return new ResponseEntity<Integer>(0, HttpStatus.OK);			
-		}
-
+		return new ResponseEntity<List<UserDTO>>(listUserDTO, HttpStatus.OK);
 	}
 
 	// Adiciona um novo User (Sem carteira)

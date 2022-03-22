@@ -1,6 +1,5 @@
 package br.com.finance.cdd.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -54,21 +53,20 @@ public class UserServices {
 		}
 	}
 	
-	public Integer getMaxUsers(Long idAdmin) {
-		Optional<Integer> maxUserCountOpt = userRepository.findMaxUsersCount(idAdmin);
+	// Retorna a lista completa de usuáriosDTO
+	public List<UserDTO> getUsersAllByIdAdmin(Long idAdmin){
+		Optional<List<User>> listUserOpt = userRepository.findAllUsersByIdAdmin(idAdmin);
 		
-		if(maxUserCountOpt.isPresent()) {
-			return maxUserCountOpt.get();			
+		if(listUserOpt.isPresent()) {
+			List<User> users = listUserOpt.get();
+			return users.stream()
+					.map(user -> new UserDTO(user))
+					.collect(Collectors.toList());
+		} else {
+			throw new ResourceNotFoundException("User Not Found");
 		}
-		
-		throw new ResourceNotFoundException("User Not Found");
 	}
-	
-	// Devolver uma lista com o usuário que mais vendeu no dia
-	public UserDTO findUserByHighestValueAppDay(String date){
-		Optional<List<User>> listUserOpt = userRepository.findListUserDayHighestWallet(null, null);
-		return null;
-	}
+
 
 	// Retorna Lista de UsersDTO sem users deletados
 	public Page<UserDTO> findAllUserDTO(Pageable pageable, Long idAdmin) { // Verificar o List para Page
@@ -78,32 +76,6 @@ public class UserServices {
 				.collect(Collectors.toList());
 		
 		return new PageImpl<UserDTO>(usersDTO, pageable, users.getTotalElements());
-	}
-	
-	public ArrayList<Integer> findByIdAdminMaxValueList(Long idAdmin){
-		Optional<List<User>> usersOpt = userRepository.findAllUsersByIdAdminIs(idAdmin);
-		
-		if(usersOpt.isEmpty()) {
-			throw new ResourceNotFoundException("Users Not Found");
-		}
-		
-		List<User> users = usersOpt.get();
-		
-		int maxValueUserPositivo = users.stream()
-							.filter(user -> user.getDateDelete() == null)
-							.filter(user -> user.getWallet().getValue() >= 0)
-							.collect(Collectors.toList()).size();
-		
-		int maxValueUserNegativo = users.stream()
-				.filter(user -> user.getDateDelete() == null)
-				.filter(user -> user.getWallet().getValue() < 0)
-				.collect(Collectors.toList()).size();
-		
-		ArrayList<Integer> list = new ArrayList<Integer>();
-		list.add(maxValueUserPositivo);
-		list.add(maxValueUserNegativo);
-		
-		return list;
 	}
 
 	// Salva um UserForm

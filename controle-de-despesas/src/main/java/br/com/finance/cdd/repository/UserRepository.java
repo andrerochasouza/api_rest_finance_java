@@ -28,15 +28,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 		   nativeQuery = true)
 	Integer findCountCpf(String cpf);
 	
-	@Query(value = "SELECT u.* FROM finance_io.users AS u, finance_io.aplications AS a WHERE a.date_init > ?1 AND a.date_init < ?2",
-			   nativeQuery = true)
-	Optional<List<User>> findListUserDayHighestWallet(String dateInit, String dateAfter);
 	
-	@Query(value = "SELECT COUNT(*) FROM finance_io.users WHERE users.date_delete is null AND users.id_admin_user = ?1",
+	@Query(value = "SELECT * FROM finance_io.users WHERE users.id_admin_user = ?1 AND users.date_delete is null",
 			   nativeQuery = true)
-	Optional<Integer> findMaxUsersCount(Long idAdmin);
-	
-	@Query(value = "SELECT * FROM finance_io.users WHERE users.id_admin_user = ?1",
-			   nativeQuery = true)
-	Optional<List<User>> findAllUsersByIdAdminIs(Long idAdmin);
+	Optional<List<User>> findAllUsersByIdAdmin(Long idAdmin);
 }
